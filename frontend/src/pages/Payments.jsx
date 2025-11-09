@@ -80,7 +80,7 @@ export default function Payments() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold" style={{ color: 'var(--theme-text)' }}>
-          'Payments' : 'Payments'}
+          Payments
         </h1>
         <button
           onClick={() => setShowModal(true)}

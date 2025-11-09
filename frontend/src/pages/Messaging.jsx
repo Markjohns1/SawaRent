@@ -70,11 +70,21 @@ export default function Messaging() {
     return tenant ? tenant.full_name : 'Unknown'
   }
 
+  const getPreviewMessage = (content) => {
+    return content
+      .replace(/{tenant_name}/g, 'John Doe')
+      .replace(/{unit_number}/g, 'A101')
+      .replace(/{amount}/g, '15,000')
+      .replace(/{payment_date}/g, '15/11/2025')
+      .replace(/{remaining_amount}/g, '5,000')
+      .replace(/{transaction_reference}/g, 'MPE12345')
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold" style={{ color: 'var(--theme-text)' }}>
-          'Messaging' : 'Messaging'}
+          Messaging
         </h1>
         <button
           onClick={() => setShowModal(true)}
@@ -90,7 +100,7 @@ export default function Messaging() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="theme-card p-6">
           <h2 className="text-xl font-bold mb-4 flex items-center space-x-2" style={{ color: 'var(--theme-text)' }}>
-            <span>{theme === 'friendly' ? '📝' : ''}</span>
+            <i className="fas fa-file-lines"></i>
             <span>Message Templates</span>
           </h2>
           <div className="space-y-3">
@@ -114,7 +124,9 @@ export default function Messaging() {
                     {template.theme}
                   </span>
                 </div>
-                <p className="text-sm" style={{ color: 'var(--theme-text-secondary)' }}>{template.content}</p>
+                <p className="text-sm italic" style={{ color: 'var(--theme-text-secondary)' }}>
+                  {getPreviewMessage(template.content)}
+                </p>
               </div>
             ))}
           </div>
@@ -122,7 +134,7 @@ export default function Messaging() {
 
         <div className="theme-card p-6">
           <h2 className="text-xl font-bold mb-4 flex items-center space-x-2" style={{ color: 'var(--theme-text)' }}>
-            <span>{theme === 'friendly' ? '📨' : ''}</span>
+            <i className="fas fa-envelope"></i>
             <span>Recent SMS</span>
           </h2>
           <div className="space-y-3 max-h-[600px] overflow-y-auto">
@@ -162,7 +174,7 @@ export default function Messaging() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="theme-card max-w-md w-full max-h-screen overflow-y-auto p-6">
             <h2 className="text-2xl font-bold mb-6" style={{ color: 'var(--theme-text)' }}>
-              {theme === 'friendly' ? 'Send SMS' : 'Send SMS'}
+              Send SMS
             </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
