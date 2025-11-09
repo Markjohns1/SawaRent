@@ -7,10 +7,13 @@ load_dotenv()
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
-    SECRET_KEY = os.getenv('SECRET_KEY', 'dev-secret-key-change-in-production')
-    db_path = os.path.join(basedir, '..', 'database', 'property_management.db')
-    SQLALCHEMY_DATABASE_URI = f'sqlite:///{db_path}'
+    SECRET_KEY = os.getenv('SESSION_SECRET', 'dev-secret-key-change-in-production')
+    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        "pool_recycle": 300,
+        "pool_pre_ping": True,
+    }
     
     TIMEZONE = os.getenv('TIMEZONE', 'Africa/Nairobi')
     
