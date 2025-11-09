@@ -192,15 +192,16 @@ export default function Messaging() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-        <h1 className="text-2xl sm:text-3xl font-bold flex items-center gap-2" style={{ color: 'var(--theme-text)' }}>
-          <i className="fas fa-comments"></i>
+        <h1 className="text-2xl sm:text-3xl font-bold" style={{ color: 'var(--theme-text)' }}>
           Messaging
         </h1>
         <button
           onClick={() => setShowSmsModal(true)}
           className="theme-button px-4 py-2 font-medium flex items-center justify-center gap-2"
         >
-          <i className="fas fa-paper-plane"></i>
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+          </svg>
           <span>Send SMS</span>
         </button>
       </div>
@@ -209,9 +210,8 @@ export default function Messaging() {
         {/* Templates Section */}
         <div className="theme-card p-4 sm:p-6">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg sm:text-xl font-bold flex items-center gap-2" style={{ color: 'var(--theme-text)' }}>
-              <i className="fas fa-file-lines"></i>
-              <span>Message Templates</span>
+            <h2 className="text-lg sm:text-xl font-bold" style={{ color: 'var(--theme-text)' }}>
+              Message Templates
             </h2>
             <button
               onClick={() => {
@@ -224,11 +224,9 @@ export default function Messaging() {
                 })
                 setShowTemplateModal(true)
               }}
-              className="px-3 py-1.5 text-sm font-medium rounded transition-opacity hover:opacity-80"
-              style={{ backgroundColor: 'var(--theme-primary)', color: 'white' }}
+              className="theme-button px-3 py-1.5 text-sm font-medium"
             >
-              <i className="fas fa-plus mr-1"></i>
-              New
+              New Template
             </button>
           </div>
           
@@ -238,36 +236,61 @@ export default function Messaging() {
                 style={{
                   borderColor: 'var(--theme-border)',
                   borderRadius: 'var(--theme-radius)',
+                  backgroundColor: 'var(--theme-surface)'
                 }}
               >
                 <div className="flex justify-between items-start mb-2">
                   <div className="flex-1">
-                    <h3 className="font-semibold" style={{ color: 'var(--theme-text)' }}>{template.name}</h3>
-                    <span className="text-xs px-2 py-0.5 rounded inline-block mt-1" style={{
-                      backgroundColor: template.theme === 'friendly' ? '#fed7aa' : '#e0e7ff',
-                      color: 'var(--theme-text)'
-                    }}>
-                      {template.category} • {template.theme}
-                    </span>
+                    <h3 className="font-semibold text-base" style={{ color: 'var(--theme-text)' }}>{template.name}</h3>
+                    <div className="flex gap-2 mt-2">
+                      <span className="text-xs px-2 py-1 rounded font-medium" style={{
+                        backgroundColor: 'var(--theme-background)',
+                        color: 'var(--theme-text)',
+                        border: '1px solid var(--theme-border)'
+                      }}>
+                        {template.category}
+                      </span>
+                      <span className="text-xs px-2 py-1 rounded font-medium" style={{
+                        backgroundColor: 'var(--theme-background)',
+                        color: 'var(--theme-text)',
+                        border: '1px solid var(--theme-border)'
+                      }}>
+                        {template.theme}
+                      </span>
+                    </div>
                   </div>
                   <div className="flex gap-1 ml-2">
                     <button
                       onClick={() => handleEditTemplate(template)}
-                      className="p-1.5 rounded hover:bg-gray-100 transition-colors"
+                      className="p-1.5 rounded transition-colors"
+                      style={{
+                        backgroundColor: 'var(--theme-background)',
+                        color: 'var(--theme-primary)',
+                        border: '1px solid var(--theme-border)'
+                      }}
                       title="Edit"
                     >
-                      <i className="fas fa-edit text-blue-600"></i>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                      </svg>
                     </button>
                     <button
                       onClick={() => handleDeleteTemplate(template.id)}
-                      className="p-1.5 rounded hover:bg-gray-100 transition-colors"
+                      className="p-1.5 rounded transition-colors"
+                      style={{
+                        backgroundColor: 'var(--theme-background)',
+                        color: 'var(--theme-danger)',
+                        border: '1px solid var(--theme-border)'
+                      }}
                       title="Delete"
                     >
-                      <i className="fas fa-trash text-red-600"></i>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
                     </button>
                   </div>
                 </div>
-                <p className="text-sm italic" style={{ color: 'var(--theme-text-secondary)' }}>
+                <p className="text-sm mt-3" style={{ color: 'var(--theme-text)' }}>
                   {getPreviewMessage(template.content)}
                 </p>
               </div>
@@ -278,9 +301,8 @@ export default function Messaging() {
         {/* SMS Logs Section */}
         <div className="theme-card p-4 sm:p-6">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-4">
-            <h2 className="text-lg sm:text-xl font-bold flex items-center gap-2" style={{ color: 'var(--theme-text)' }}>
-              <i className="fas fa-envelope"></i>
-              <span>Recent SMS</span>
+            <h2 className="text-lg sm:text-xl font-bold" style={{ color: 'var(--theme-text)' }}>
+              Recent SMS
             </h2>
             <div className="flex gap-2">
               <select
@@ -289,7 +311,8 @@ export default function Messaging() {
                 className="px-3 py-1.5 text-sm border-2 rounded"
                 style={{
                   borderColor: 'var(--theme-border)',
-                  color: 'var(--theme-text)'
+                  color: 'var(--theme-text)',
+                  backgroundColor: 'var(--theme-surface)'
                 }}
               >
                 <option value="all">All</option>
@@ -299,10 +322,12 @@ export default function Messaging() {
               <button
                 onClick={handleClearAllLogs}
                 className="px-3 py-1.5 text-sm font-medium rounded transition-opacity hover:opacity-80"
-                style={{ backgroundColor: '#ef4444', color: 'white' }}
+                style={{ backgroundColor: 'var(--theme-danger)', color: 'white' }}
                 title="Clear all logs"
               >
-                <i className="fas fa-trash-alt"></i>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
               </button>
             </div>
           </div>
@@ -310,27 +335,30 @@ export default function Messaging() {
           <div className="space-y-3 max-h-[600px] overflow-y-auto">
             {filteredLogs.length === 0 ? (
               <div className="text-center py-8" style={{ color: 'var(--theme-text-secondary)' }}>
-                <i className="fas fa-inbox text-4xl mb-2"></i>
+                <svg className="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2M4 13h2m8-8V4a1 1 0 00-1-1h-2a1 1 0 00-1 1v1M9 7h6" />
+                </svg>
                 <p>No SMS logs found</p>
               </div>
             ) : (
               filteredLogs.slice(0, 50).map((log) => (
                 <div key={log.id} className="p-4 border-2 transition-all"
                   style={{
-                    borderColor: 'var(--theme-border-light)',
+                    borderColor: 'var(--theme-border)',
                     borderRadius: 'var(--theme-radius)',
+                    backgroundColor: 'var(--theme-surface)'
                   }}
                 >
                   <div className="flex justify-between items-start mb-2">
                     <div className="flex-1">
-                      <div className="font-semibold" style={{ color: 'var(--theme-text)' }}>{log.recipient_name}</div>
-                      <div className="text-xs" style={{ color: 'var(--theme-text-secondary)' }}>{log.recipient_phone}</div>
+                      <div className="font-semibold text-base" style={{ color: 'var(--theme-text)' }}>{log.recipient_name}</div>
+                      <div className="text-sm mt-1" style={{ color: 'var(--theme-text-secondary)' }}>{log.recipient_phone}</div>
                     </div>
                     <div className="flex items-center gap-2">
                       <span
                         className="text-xs px-2 py-1 font-medium text-white rounded"
                         style={{
-                          backgroundColor: log.status === 'sent' ? '#10b981' : '#ef4444'
+                          backgroundColor: log.status === 'sent' ? 'var(--theme-success)' : 'var(--theme-danger)'
                         }}
                       >
                         {log.status}
@@ -338,24 +366,37 @@ export default function Messaging() {
                       {log.status === 'failed' && (
                         <button
                           onClick={() => handleResendSms(log)}
-                          className="p-1.5 rounded hover:bg-gray-100 transition-colors"
+                          className="p-1.5 rounded transition-colors"
+                          style={{
+                            backgroundColor: 'var(--theme-background)',
+                            color: 'var(--theme-primary)',
+                            border: '1px solid var(--theme-border)'
+                          }}
                           title="Resend"
                         >
-                          <i className="fas fa-rotate-right text-blue-600"></i>
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                          </svg>
                         </button>
                       )}
                       <button
                         onClick={() => handleDeleteSmsLog(log.id)}
-                        className="p-1.5 rounded hover:bg-gray-100 transition-colors"
+                        className="p-1.5 rounded transition-colors"
+                        style={{
+                          backgroundColor: 'var(--theme-background)',
+                          color: 'var(--theme-danger)',
+                          border: '1px solid var(--theme-border)'
+                        }}
                         title="Delete"
                       >
-                        <i className="fas fa-trash text-red-600"></i>
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
                       </button>
                     </div>
                   </div>
-                  <p className="text-sm mb-2" style={{ color: 'var(--theme-text)' }}>{log.message}</p>
-                  <div className="text-xs" style={{ color: 'var(--theme-text-secondary)' }}>
-                    <i className="fas fa-clock mr-1"></i>
+                  <p className="text-sm mb-3" style={{ color: 'var(--theme-text)' }}>{log.message}</p>
+                  <div className="text-sm" style={{ color: 'var(--theme-text-secondary)' }}>
                     {new Date(log.sent_at).toLocaleString()}
                   </div>
                 </div>
@@ -369,14 +410,12 @@ export default function Messaging() {
       {showSmsModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="theme-card max-w-md w-full max-h-screen overflow-y-auto p-6">
-            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2" style={{ color: 'var(--theme-text)' }}>
-              <i className="fas fa-paper-plane"></i>
+            <h2 className="text-2xl font-bold mb-6" style={{ color: 'var(--theme-text)' }}>
               Send SMS
             </h2>
             <form onSubmit={handleSendSms} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-2" style={{ color: 'var(--theme-text)' }}>
-                  <i className="fas fa-user mr-1"></i>
                   Tenant
                 </label>
                 <select
@@ -385,6 +424,7 @@ export default function Messaging() {
                     borderColor: 'var(--theme-border)',
                     borderRadius: 'var(--theme-radius)',
                     color: 'var(--theme-text)',
+                    backgroundColor: 'var(--theme-surface)'
                   }}
                   value={smsFormData.tenant_id}
                   onChange={(e) => setSmsFormData({ ...smsFormData, tenant_id: e.target.value })}
@@ -400,7 +440,6 @@ export default function Messaging() {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-2" style={{ color: 'var(--theme-text)' }}>
-                  <i className="fas fa-file-lines mr-1"></i>
                   Template (optional)
                 </label>
                 <select
@@ -409,6 +448,7 @@ export default function Messaging() {
                     borderColor: 'var(--theme-border)',
                     borderRadius: 'var(--theme-radius)',
                     color: 'var(--theme-text)',
+                    backgroundColor: 'var(--theme-surface)'
                   }}
                   value={smsFormData.template_id}
                   onChange={(e) => {
@@ -431,7 +471,6 @@ export default function Messaging() {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-2" style={{ color: 'var(--theme-text)' }}>
-                  <i className="fas fa-message mr-1"></i>
                   Message
                 </label>
                 <textarea
@@ -440,6 +479,7 @@ export default function Messaging() {
                     borderColor: 'var(--theme-border)',
                     borderRadius: 'var(--theme-radius)',
                     color: 'var(--theme-text)',
+                    backgroundColor: 'var(--theme-surface)'
                   }}
                   rows="4"
                   placeholder="Type your message here..."
@@ -453,7 +493,6 @@ export default function Messaging() {
                   type="submit"
                   className="flex-1 theme-button px-4 py-3 font-medium"
                 >
-                  <i className="fas fa-paper-plane mr-2"></i>
                   Send SMS
                 </button>
                 <button
@@ -461,9 +500,10 @@ export default function Messaging() {
                   onClick={() => setShowSmsModal(false)}
                   className="flex-1 px-4 py-3 font-medium transition-all"
                   style={{
-                    backgroundColor: '#e5e7eb',
-                    color: '#374151',
+                    backgroundColor: 'var(--theme-background)',
+                    color: 'var(--theme-text)',
                     borderRadius: 'var(--theme-radius)',
+                    border: '1px solid var(--theme-border)'
                   }}
                 >
                   Cancel
@@ -478,8 +518,7 @@ export default function Messaging() {
       {showTemplateModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="theme-card max-w-md w-full max-h-screen overflow-y-auto p-6">
-            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2" style={{ color: 'var(--theme-text)' }}>
-              <i className="fas fa-file-lines"></i>
+            <h2 className="text-2xl font-bold mb-6" style={{ color: 'var(--theme-text)' }}>
               {editingTemplate ? 'Edit Template' : 'Create Template'}
             </h2>
             <form onSubmit={handleTemplateSubmit} className="space-y-4">
@@ -492,6 +531,7 @@ export default function Messaging() {
                     borderColor: 'var(--theme-border)',
                     borderRadius: 'var(--theme-radius)',
                     color: 'var(--theme-text)',
+                    backgroundColor: 'var(--theme-surface)'
                   }}
                   placeholder="e.g., Payment Reminder"
                   value={templateFormData.name}
@@ -507,6 +547,7 @@ export default function Messaging() {
                     borderColor: 'var(--theme-border)',
                     borderRadius: 'var(--theme-radius)',
                     color: 'var(--theme-text)',
+                    backgroundColor: 'var(--theme-surface)'
                   }}
                   value={templateFormData.category}
                   onChange={(e) => setTemplateFormData({ ...templateFormData, category: e.target.value })}
@@ -528,6 +569,7 @@ export default function Messaging() {
                     borderColor: 'var(--theme-border)',
                     borderRadius: 'var(--theme-radius)',
                     color: 'var(--theme-text)',
+                    backgroundColor: 'var(--theme-surface)'
                   }}
                   value={templateFormData.theme}
                   onChange={(e) => setTemplateFormData({ ...templateFormData, theme: e.target.value })}
@@ -547,6 +589,7 @@ export default function Messaging() {
                     borderColor: 'var(--theme-border)',
                     borderRadius: 'var(--theme-radius)',
                     color: 'var(--theme-text)',
+                    backgroundColor: 'var(--theme-surface)'
                   }}
                   rows="5"
                   placeholder="Use placeholders: {tenant_name}, {unit_number}, {amount}, {payment_date}, {remaining_amount}, {transaction_reference}"
@@ -555,7 +598,6 @@ export default function Messaging() {
                   required
                 />
                 <p className="text-xs mt-1" style={{ color: 'var(--theme-text-secondary)' }}>
-                  <i className="fas fa-info-circle mr-1"></i>
                   Available placeholders: {'{tenant_name}'}, {'{unit_number}'}, {'{amount}'}, {'{payment_date}'}, {'{remaining_amount}'}, {'{transaction_reference}'}
                 </p>
               </div>
@@ -564,7 +606,6 @@ export default function Messaging() {
                   type="submit"
                   className="flex-1 theme-button px-4 py-3 font-medium"
                 >
-                  <i className="fas fa-save mr-2"></i>
                   {editingTemplate ? 'Update' : 'Create'}
                 </button>
                 <button
@@ -575,9 +616,10 @@ export default function Messaging() {
                   }}
                   className="flex-1 px-4 py-3 font-medium transition-all"
                   style={{
-                    backgroundColor: '#e5e7eb',
-                    color: '#374151',
+                    backgroundColor: 'var(--theme-background)',
+                    color: 'var(--theme-text)',
                     borderRadius: 'var(--theme-radius)',
+                    border: '1px solid var(--theme-border)'
                   }}
                 >
                   Cancel

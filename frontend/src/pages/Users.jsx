@@ -1,4 +1,5 @@
 ﻿import { useState, useEffect } from 'react'
+import { useTheme } from '../context/ThemeContext'
 
 const api = {
   get: async () => {
@@ -76,6 +77,7 @@ export default function Users() {
     phone: '',
     full_name: ''
   })
+  const { theme } = useTheme()
 
   useEffect(() => {
     fetchUsers()
@@ -176,11 +178,11 @@ export default function Users() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 sm:p-6">
+    <div className="min-h-screen p-4 sm:p-6" style={{ backgroundColor: 'var(--theme-background)' }}>
       <div className="max-w-5xl mx-auto space-y-4">
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+          <h1 className="text-2xl sm:text-3xl font-bold" style={{ color: 'var(--theme-text)' }}>
             User Management
           </h1>
           <button
@@ -196,24 +198,36 @@ export default function Users() {
               })
               setShowModal(true)
             }}
-            className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg font-medium transition-colors"
+            className="w-full sm:w-auto theme-button px-6 py-2.5 rounded-lg font-medium transition-colors"
           >
             + Add User
           </button>
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
+        <div className="theme-card p-4">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
             <input
               type="text"
               placeholder="Search users..."
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+              className="w-full px-4 py-2.5 border-2 focus:outline-none transition-all"
+              style={{
+                borderColor: 'var(--theme-border)',
+                borderRadius: 'var(--theme-radius)',
+                color: 'var(--theme-text)',
+                backgroundColor: 'var(--theme-surface)'
+              }}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
             <select
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+              className="w-full px-4 py-2.5 border-2 focus:outline-none transition-all"
+              style={{
+                borderColor: 'var(--theme-border)',
+                borderRadius: 'var(--theme-radius)',
+                color: 'var(--theme-text)',
+                backgroundColor: 'var(--theme-surface)'
+              }}
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
             >
@@ -222,7 +236,13 @@ export default function Users() {
               <option value="inactive">Inactive</option>
             </select>
             <select
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+              className="w-full px-4 py-2.5 border-2 focus:outline-none transition-all"
+              style={{
+                borderColor: 'var(--theme-border)',
+                borderRadius: 'var(--theme-radius)',
+                color: 'var(--theme-text)',
+                backgroundColor: 'var(--theme-surface)'
+              }}
               value={filterRole}
               onChange={(e) => setFilterRole(e.target.value)}
             >
@@ -232,7 +252,7 @@ export default function Users() {
               <option value="tenant">Tenant</option>
             </select>
           </div>
-          <p className="text-xs text-gray-500">
+          <p className="text-xs" style={{ color: 'var(--theme-text-secondary)' }}>
             Showing {filteredUsers.length} of {users.length} users
           </p>
         </div>
@@ -242,12 +262,12 @@ export default function Users() {
           {filteredUsers.map((user) => {
             const roleBadge = getRoleBadge(user.role)
             return (
-              <div key={user.id} className="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md transition-shadow">
+              <div key={user.id} className="theme-card p-4 hover:shadow-lg transition-shadow">
                 {/* Header Row */}
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-bold text-lg text-gray-900 truncate">{user.full_name}</h3>
-                    <p className="text-sm text-gray-500">@{user.username}</p>
+                    <h3 className="font-bold text-lg truncate" style={{ color: 'var(--theme-text)' }}>{user.full_name}</h3>
+                    <p className="text-sm" style={{ color: 'var(--theme-text-secondary)' }}>@{user.username}</p>
                   </div>
                   <div className="flex gap-2 flex-shrink-0 ml-2">
                     <span className={`px-3 py-1 text-xs font-semibold text-white rounded-full ${roleBadge.color}`}>
@@ -265,14 +285,14 @@ export default function Users() {
 
                 {/* Contact Info */}
                 <div className="space-y-2 mb-4 text-sm">
-                  <div className="flex items-center gap-2 text-gray-700">
-                    <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="flex items-center gap-2" style={{ color: 'var(--theme-text)' }}>
+                    <svg className="w-4 h-4" style={{ color: 'var(--theme-text-secondary)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
                     <span className="truncate">{user.email}</span>
                   </div>
-                  <div className="flex items-center gap-2 text-gray-700">
-                    <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="flex items-center gap-2" style={{ color: 'var(--theme-text)' }}>
+                    <svg className="w-4 h-4" style={{ color: 'var(--theme-text-secondary)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                     </svg>
                     <span>{user.phone}</span>
@@ -283,7 +303,12 @@ export default function Users() {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => handleEdit(user)}
-                    className="flex items-center justify-center w-10 h-10 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors"
+                    className="flex items-center justify-center w-10 h-10 rounded-lg transition-colors"
+                    style={{
+                      backgroundColor: 'var(--theme-background)',
+                      color: 'var(--theme-primary)',
+                      border: '1px solid var(--theme-border)'
+                    }}
                     title="Edit"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -294,22 +319,27 @@ export default function Users() {
                   {currentUser?.id !== user.id && (
                     <>
                       <button
-  onClick={() => handleToggleActive(user.id)}
-  className={`flex items-center justify-center w-10 h-10 rounded-lg transition-colors ${
-    user.is_active 
-      ? 'bg-gray-100 text-gray-600 hover:bg-gray-200' 
-      : 'bg-green-50 text-green-600 hover:bg-green-100'
-  }`}
-  title={user.is_active ? 'Deactivate' : 'Activate'}
->
-  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v10m4.5-8.5a8.5 8.5 0 1 1-9 0" />
-  </svg>
-</button>
+                        onClick={() => handleToggleActive(user.id)}
+                        className={`flex items-center justify-center w-10 h-10 rounded-lg transition-colors ${
+                          user.is_active 
+                            ? 'bg-gray-100 text-gray-600 hover:bg-gray-200' 
+                            : 'bg-green-50 text-green-600 hover:bg-green-100'
+                        }`}
+                        title={user.is_active ? 'Deactivate' : 'Activate'}
+                      >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v10m4.5-8.5a8.5 8.5 0 1 1-9 0" />
+                        </svg>
+                      </button>
                       
                       <button
                         onClick={() => handleDelete(user.id, user.full_name || user.username)}
-                        className="flex items-center justify-center w-10 h-10 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition-colors"
+                        className="flex items-center justify-center w-10 h-10 rounded-lg transition-colors"
+                        style={{
+                          backgroundColor: 'var(--theme-background)',
+                          color: 'var(--theme-danger)',
+                          border: '1px solid var(--theme-border)'
+                        }}
                         title="Delete"
                       >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -325,67 +355,97 @@ export default function Users() {
         </div>
 
         {filteredUsers.length === 0 && (
-          <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
-            <svg className="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="theme-card p-12 text-center">
+            <svg className="w-16 h-16 mx-auto mb-4" style={{ color: 'var(--theme-text-secondary)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
             </svg>
-            <p className="text-lg font-medium text-gray-900 mb-1">No users found</p>
-            <p className="text-sm text-gray-500">Try adjusting your search filters</p>
+            <p className="text-lg font-medium mb-1" style={{ color: 'var(--theme-text)' }}>No users found</p>
+            <p className="text-sm" style={{ color: 'var(--theme-text-secondary)' }}>Try adjusting your search filters</p>
           </div>
         )}
 
         {/* Modal */}
         {showModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div className="bg-white rounded-xl max-w-md w-full max-h-[90vh] overflow-y-auto p-6">
-              <h2 className="text-2xl font-bold mb-6 text-gray-900">
+            <div className="theme-card max-w-md w-full max-h-[90vh] overflow-y-auto p-6">
+              <h2 className="text-2xl font-bold mb-6" style={{ color: 'var(--theme-text)' }}>
                 {editingUser ? 'Edit User' : 'Add New User'}
               </h2>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium mb-2 text-gray-700">Full Name</label>
+                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--theme-text)' }}>Full Name</label>
                   <input
                     type="text"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                    className="w-full px-4 py-2.5 border-2 focus:outline-none transition-all"
+                    style={{
+                      borderColor: 'var(--theme-border)',
+                      borderRadius: 'var(--theme-radius)',
+                      color: 'var(--theme-text)',
+                      backgroundColor: 'var(--theme-surface)'
+                    }}
                     value={formData.full_name}
                     onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-2 text-gray-700">Username</label>
+                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--theme-text)' }}>Username</label>
                   <input
                     type="text"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                    className="w-full px-4 py-2.5 border-2 focus:outline-none transition-all"
+                    style={{
+                      borderColor: 'var(--theme-border)',
+                      borderRadius: 'var(--theme-radius)',
+                      color: 'var(--theme-text)',
+                      backgroundColor: 'var(--theme-surface)'
+                    }}
                     value={formData.username}
                     onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-2 text-gray-700">Email</label>
+                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--theme-text)' }}>Email</label>
                   <input
                     type="email"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                    className="w-full px-4 py-2.5 border-2 focus:outline-none transition-all"
+                    style={{
+                      borderColor: 'var(--theme-border)',
+                      borderRadius: 'var(--theme-radius)',
+                      color: 'var(--theme-text)',
+                      backgroundColor: 'var(--theme-surface)'
+                    }}
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-2 text-gray-700">Phone</label>
+                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--theme-text)' }}>Phone</label>
                   <input
                     type="tel"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                    className="w-full px-4 py-2.5 border-2 focus:outline-none transition-all"
+                    style={{
+                      borderColor: 'var(--theme-border)',
+                      borderRadius: 'var(--theme-radius)',
+                      color: 'var(--theme-text)',
+                      backgroundColor: 'var(--theme-surface)'
+                    }}
                     placeholder="+254712345678"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-2 text-gray-700">Role</label>
+                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--theme-text)' }}>Role</label>
                   <select
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                    className="w-full px-4 py-2.5 border-2 focus:outline-none transition-all"
+                    style={{
+                      borderColor: 'var(--theme-border)',
+                      borderRadius: 'var(--theme-radius)',
+                      color: 'var(--theme-text)',
+                      backgroundColor: 'var(--theme-surface)'
+                    }}
                     value={formData.role}
                     onChange={(e) => setFormData({ ...formData, role: e.target.value })}
                     required
@@ -396,12 +456,18 @@ export default function Users() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-2 text-gray-700">
+                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--theme-text)' }}>
                     Password {editingUser && '(leave blank to keep current)'}
                   </label>
                   <input
                     type="password"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                    className="w-full px-4 py-2.5 border-2 focus:outline-none transition-all"
+                    style={{
+                      borderColor: 'var(--theme-border)',
+                      borderRadius: 'var(--theme-radius)',
+                      color: 'var(--theme-text)',
+                      backgroundColor: 'var(--theme-surface)'
+                    }}
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                     required={!editingUser}
@@ -410,7 +476,7 @@ export default function Users() {
                 <div className="flex gap-3 pt-2">
                   <button
                     onClick={handleSubmit}
-                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium transition-colors"
+                    className="flex-1 theme-button py-3 rounded-lg font-medium transition-colors"
                   >
                     {editingUser ? 'Update' : 'Create'}
                   </button>
@@ -419,7 +485,12 @@ export default function Users() {
                       setShowModal(false)
                       setEditingUser(null)
                     }}
-                    className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 rounded-lg font-medium transition-colors"
+                    className="flex-1 py-3 rounded-lg font-medium transition-colors"
+                    style={{
+                      backgroundColor: 'var(--theme-background)',
+                      color: 'var(--theme-text)',
+                      border: '1px solid var(--theme-border)'
+                    }}
                   >
                     Cancel
                   </button>

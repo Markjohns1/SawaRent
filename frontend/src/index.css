@@ -4,34 +4,10 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --theme-primary: #f97316;
-  --theme-background: #fff7ed;
-  --theme-surface: #ffffff;
-  --theme-text: #78350f;
-  --theme-radius: 1.5rem;
-  --theme-shadow: 0 10px 25px -5px rgba(249, 115, 22, 0.15);
-}
+/* Remove the :root section - it's conflicting */
+/* Remove [data-theme="friendly"] entirely */
 
-[data-theme="friendly"] {
-  --theme-primary: #f97316;
-  --theme-secondary: #fb923c;
-  --theme-accent: #fbbf24;
-  --theme-success: #34d399;
-  --theme-warning: #fbbf24;
-  --theme-danger: #f87171;
-  --theme-background: #fff7ed;
-  --theme-surface: #ffffff;
-  --theme-text: #78350f;
-  --theme-text-secondary: #9a3412;
-  --theme-border: rgba(154, 52, 18, 0.25);
-  --theme-border-light: rgba(154, 52, 18, 0.15);
-  --theme-border-strong: rgba(154, 52, 18, 0.4);
-  --theme-radius: 1.5rem;
-  --theme-shadow: 0 10px 25px -5px rgba(249, 115, 22, 0.15);
-}
-
-[data-theme="formal"] {
+[data-theme="light"] {
   --theme-primary: #1e40af;
   --theme-secondary: #3b82f6;
   --theme-accent: #60a5fa;
@@ -58,13 +34,22 @@
   --theme-danger: #ef4444;
   --theme-background: #0f172a;
   --theme-surface: #1e293b;
-  --theme-text: #f1f5f9;
-  --theme-text-secondary: #cbd5e1;
-  --theme-border: rgba(148, 163, 184, 0.2);
-  --theme-border-light: rgba(148, 163, 184, 0.1);
-  --theme-border-strong: rgba(148, 163, 184, 0.3);
+  --theme-text: #f8fafc;           /* Brighter text */
+  --theme-text-secondary: #e2e8f0; /* Better contrast */
+  --theme-border: #334155;         /* Darker borders */
+  --theme-border-light: #475569;
+  --theme-border-strong: #64748b;
   --theme-radius: 0.5rem;
   --theme-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+}
+
+/* Update font families */
+[data-theme="light"] body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+[data-theme="dark"] body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 body {

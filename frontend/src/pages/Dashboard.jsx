@@ -73,7 +73,7 @@ export default function Dashboard() {
           Property Dashboard
         </h1>
         <div className="text-sm" style={{ color: 'var(--theme-text-secondary)' }}>
-          {new Date().toLocaleDateString('en-KE', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+          {new Date().toLocaleDateString('en-KE', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}
         </div>
       </div>
 

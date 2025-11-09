@@ -13,7 +13,7 @@ export const useTheme = () => {
 export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(() => {
     const savedTheme = localStorage.getItem('app-theme')
-    return savedTheme || 'formal'
+    return savedTheme || 'light'  // Default to light
   })
 
   useEffect(() => {
@@ -22,11 +22,7 @@ export const ThemeProvider = ({ children }) => {
   }, [theme])
 
   const toggleTheme = () => {
-    setTheme(prev => {
-      if (prev === 'formal') return 'dark'
-      if (prev === 'dark') return 'friendly'
-      return 'formal'
-    })
+    setTheme(prev => prev === 'light' ? 'dark' : 'light')
   }
 
   return (

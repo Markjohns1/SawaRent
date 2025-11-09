@@ -61,9 +61,9 @@ export default function Payments() {
   }
 
   const getStatusColor = (status) => {
-    if (status === 'Full') return theme === 'friendly' ? '#34d399' : '#059669'
-    if (status === 'Partial') return theme === 'friendly' ? '#fbbf24' : '#d97706'
-    return '#9ca3af'
+    if (status === 'Full') return '#10b981' // success color
+    if (status === 'Partial') return '#f59e0b' // warning color
+    return '#9ca3af' // gray
   }
 
   const getTenantName = (tenantId) => {
@@ -83,37 +83,59 @@ export default function Payments() {
           Payments
         </h1>
         <button
-          onClick={() => setShowModal(true)}
-          className="theme-button px-4 py-2 font-medium flex items-center space-x-2"
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-          </svg>
-          <span>Log Payment</span>
-        </button>
+  onClick={() => setShowModal(true)}
+  className="theme-button px-3 py-2 sm:px-4 sm:py-2 font-medium flex items-center space-x-2 text-sm sm:text-base"
+>
+  <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+  </svg>
+  <span>Log Payment</span>
+</button>
       </div>
 
+      {/* Professional Table */}
       <div className="theme-card overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y" style={{ borderColor: 'var(--theme-border-light)' }}>
+          <table className="min-w-full">
             <thead>
-              <tr style={{ backgroundColor: theme === 'friendly' ? '#fed7aa' : '#e2e8f0' }}>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase" style={{ color: 'var(--theme-text)' }}>Date</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase" style={{ color: 'var(--theme-text)' }}>Tenant</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase" style={{ color: 'var(--theme-text)' }}>Unit</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase" style={{ color: 'var(--theme-text)' }}>Amount</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase" style={{ color: 'var(--theme-text)' }}>Method</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase" style={{ color: 'var(--theme-text)' }}>Status</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase" style={{ color: 'var(--theme-text)' }}>Remaining</th>
+              <tr style={{ backgroundColor: 'var(--theme-background)' }}>
+                <th className="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider" style={{ color: 'var(--theme-text)' }}>
+                  Date
+                </th>
+                <th className="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider" style={{ color: 'var(--theme-text)' }}>
+                  Tenant
+                </th>
+                <th className="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider" style={{ color: 'var(--theme-text)' }}>
+                  Unit
+                </th>
+                <th className="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider" style={{ color: 'var(--theme-text)' }}>
+                  Amount
+                </th>
+                <th className="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider" style={{ color: 'var(--theme-text)' }}>
+                  Method
+                </th>
+                <th className="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider" style={{ color: 'var(--theme-text)' }}>
+                  Status
+                </th>
+                <th className="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider" style={{ color: 'var(--theme-text)' }}>
+                  Remaining
+                </th>
               </tr>
             </thead>
-            <tbody className="divide-y" style={{ borderColor: 'var(--theme-border-light)' }}>
+            <tbody className="divide-y" style={{ borderColor: 'var(--theme-border)' }}>
               {payments.map((payment) => (
-                <tr key={payment.id} className="hover:bg-gray-50 transition-colors">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm" style={{ color: 'var(--theme-text)' }}>
+                <tr 
+                  key={payment.id} 
+                  style={{ 
+                    backgroundColor: 'var(--theme-surface)',
+                    color: 'var(--theme-text)'
+                  }}
+                  className="transition-colors hover:bg-opacity-50"
+                >
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">
                     {new Date(payment.payment_date).toLocaleDateString()}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium" style={{ color: 'var(--theme-text)' }}>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     {getTenantName(payment.tenant_id)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm" style={{ color: 'var(--theme-text-secondary)' }}>
@@ -127,16 +149,15 @@ export default function Payments() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
-                      className="px-3 py-1 text-xs font-medium text-white"
+                      className="px-3 py-1 text-xs font-medium text-white rounded-full"
                       style={{
                         backgroundColor: getStatusColor(payment.payment_status),
-                        borderRadius: theme === 'friendly' ? '1rem' : '0.375rem',
                       }}
                     >
                       {payment.payment_status}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium" style={{ color: theme === 'friendly' ? '#fbbf24' : '#d97706' }}>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium" style={{ color: 'var(--theme-warning)' }}>
                     {payment.remaining_amount > 0 ? `KES ${payment.remaining_amount?.toLocaleString()}` : '-'}
                   </td>
                 </tr>
@@ -144,10 +165,21 @@ export default function Payments() {
             </tbody>
           </table>
         </div>
+        
+        {payments.length === 0 && (
+          <div className="text-center py-12">
+            <svg className="w-16 h-16 mx-auto mb-4" style={{ color: 'var(--theme-text-secondary)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+            </svg>
+            <p className="text-lg font-medium mb-1" style={{ color: 'var(--theme-text)' }}>No payments found</p>
+            <p className="text-sm" style={{ color: 'var(--theme-text-secondary)' }}>Get started by logging your first payment</p>
+          </div>
+        )}
       </div>
 
+      {/* Clean Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
           <div className="theme-card max-w-md w-full max-h-screen overflow-y-auto p-6">
             <h2 className="text-2xl font-bold mb-6" style={{ color: 'var(--theme-text)' }}>
               Log Payment
@@ -161,6 +193,7 @@ export default function Payments() {
                     borderColor: 'var(--theme-border)',
                     borderRadius: 'var(--theme-radius)',
                     color: 'var(--theme-text)',
+                    backgroundColor: 'var(--theme-surface)'
                   }}
                   value={formData.tenant_id}
                   onChange={(e) => setFormData({ ...formData, tenant_id: e.target.value })}
@@ -183,6 +216,7 @@ export default function Payments() {
                     borderColor: 'var(--theme-border)',
                     borderRadius: 'var(--theme-radius)',
                     color: 'var(--theme-text)',
+                    backgroundColor: 'var(--theme-surface)'
                   }}
                   value={formData.amount}
                   onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
@@ -198,6 +232,7 @@ export default function Payments() {
                     borderColor: 'var(--theme-border)',
                     borderRadius: 'var(--theme-radius)',
                     color: 'var(--theme-text)',
+                    backgroundColor: 'var(--theme-surface)'
                   }}
                   value={formData.payment_date}
                   onChange={(e) => setFormData({ ...formData, payment_date: e.target.value })}
@@ -212,6 +247,7 @@ export default function Payments() {
                     borderColor: 'var(--theme-border)',
                     borderRadius: 'var(--theme-radius)',
                     color: 'var(--theme-text)',
+                    backgroundColor: 'var(--theme-surface)'
                   }}
                   value={formData.payment_method}
                   onChange={(e) => setFormData({ ...formData, payment_method: e.target.value })}
@@ -230,6 +266,7 @@ export default function Payments() {
                     borderColor: 'var(--theme-border)',
                     borderRadius: 'var(--theme-radius)',
                     color: 'var(--theme-text)',
+                    backgroundColor: 'var(--theme-surface)'
                   }}
                   placeholder="Optional"
                   value={formData.transaction_reference}
@@ -260,9 +297,10 @@ export default function Payments() {
                   onClick={() => setShowModal(false)}
                   className="flex-1 px-4 py-3 font-medium transition-all"
                   style={{
-                    backgroundColor: '#e5e7eb',
-                    color: '#374151',
+                    backgroundColor: 'var(--theme-background)',
+                    color: 'var(--theme-text)',
                     borderRadius: 'var(--theme-radius)',
+                    border: '1px solid var(--theme-border)'
                   }}
                 >
                   Cancel

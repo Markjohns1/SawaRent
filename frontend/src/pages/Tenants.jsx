@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useTheme } from '../context/ThemeContext'
 
 const api = {
   get: async (url) => {
@@ -94,6 +95,7 @@ export default function Tenants() {
     lease_end_date: '',
     notes: ''
   })
+  const { theme } = useTheme()
 
   useEffect(() => {
     fetchTenants()
@@ -153,23 +155,23 @@ export default function Tenants() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 sm:p-6">
+    <div className="min-h-screen p-4 sm:p-6" style={{ backgroundColor: 'var(--theme-background)' }}>
       <div className="max-w-6xl mx-auto space-y-4">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+          <h1 className="text-2xl sm:text-3xl font-bold" style={{ color: 'var(--theme-text)' }}>
             Tenants
           </h1>
           <button
             onClick={() => setShowModal(true)}
-            className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg font-medium transition-colors"
+            className="w-full sm:w-auto theme-button px-6 py-2.5 rounded-lg font-medium transition-colors"
           >
             + Add Tenant
           </button>
         </div>
 
         {/* Search & Filters */}
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
+        <div className="theme-card p-4">
           <div className="flex gap-2 mb-3">
             <button
               onClick={() => setActiveTab('active')}
@@ -195,7 +197,13 @@ export default function Tenants() {
           <input
             type="text"
             placeholder="Search tenants..."
-            className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+            className="w-full px-4 py-2.5 border-2 focus:outline-none transition-all"
+            style={{
+              borderColor: 'var(--theme-border)',
+              borderRadius: 'var(--theme-radius)',
+              color: 'var(--theme-text)',
+              backgroundColor: 'var(--theme-surface)'
+            }}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -204,12 +212,12 @@ export default function Tenants() {
         {/* Tenant Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {tenants.map((tenant) => (
-            <div key={tenant.id} className="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md transition-shadow">
+            <div key={tenant.id} className="theme-card p-4 hover:shadow-lg transition-shadow">
               {/* Header */}
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-bold text-lg text-gray-900 truncate">{tenant.full_name}</h3>
-                  <p className="text-sm text-gray-500">Unit {tenant.unit_number}</p>
+                  <h3 className="font-bold text-lg truncate" style={{ color: 'var(--theme-text)' }}>{tenant.full_name}</h3>
+                  <p className="text-sm" style={{ color: 'var(--theme-text-secondary)' }}>Unit {tenant.unit_number}</p>
                 </div>
                 <span 
                   className={`px-3 py-1 text-xs font-semibold rounded-full flex-shrink-0 ml-2 ${
@@ -222,14 +230,14 @@ export default function Tenants() {
 
               {/* Contact Info */}
               <div className="space-y-2 mb-4">
-                <div className="flex items-center gap-2 text-sm text-gray-700">
-                  <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--theme-text)' }}>
+                  <svg className="w-4 h-4" style={{ color: 'var(--theme-text-secondary)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                   </svg>
                   <span className="truncate">{tenant.phone}</span>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-gray-700">
-                  <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--theme-text)' }}>
+                  <svg className="w-4 h-4" style={{ color: 'var(--theme-text-secondary)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
                   <span className="truncate">{tenant.email}</span>
@@ -237,16 +245,16 @@ export default function Tenants() {
               </div>
 
               {/* Rent & Lease Info */}
-              <div className="bg-gray-50 rounded-lg p-3 mb-4 space-y-2">
+              <div className="rounded-lg p-3 mb-4 space-y-2" style={{ backgroundColor: 'var(--theme-background)' }}>
                 <div className="flex justify-between items-center">
-                  <span className="text-xs text-gray-600">Monthly Rent</span>
-                  <span className="text-base font-bold text-blue-600">
+                  <span className="text-xs" style={{ color: 'var(--theme-text-secondary)' }}>Monthly Rent</span>
+                  <span className="text-base font-bold" style={{ color: 'var(--theme-primary)' }}>
                     KES {tenant.expected_rent?.toLocaleString()}
                   </span>
                 </div>
                 <div className="flex justify-between items-center text-xs">
-                  <span className="text-gray-600">Lease Ends</span>
-                  <span className="text-gray-900 font-medium">
+                  <span style={{ color: 'var(--theme-text-secondary)' }}>Lease Ends</span>
+                  <span className="font-medium" style={{ color: 'var(--theme-text)' }}>
                     {new Date(tenant.lease_end_date).toLocaleDateString()}
                   </span>
                 </div>
@@ -257,7 +265,12 @@ export default function Tenants() {
                 {tenant.is_active ? (
                   <button
                     onClick={() => handleMarkMovedOut(tenant.id)}
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-colors"
+                    style={{
+                      backgroundColor: 'var(--theme-background)',
+                      color: 'var(--theme-text)',
+                      border: '1px solid var(--theme-border)'
+                    }}
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
@@ -267,7 +280,12 @@ export default function Tenants() {
                 ) : (
                   <button
                     onClick={() => handleReactivate(tenant.id)}
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-lg bg-green-50 text-green-700 hover:bg-green-100 transition-colors"
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-colors"
+                    style={{
+                      backgroundColor: 'var(--theme-background)',
+                      color: 'var(--theme-success)',
+                      border: '1px solid var(--theme-border)'
+                    }}
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -281,27 +299,33 @@ export default function Tenants() {
         </div>
 
         {tenants.length === 0 && (
-          <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
-            <svg className="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="theme-card p-12 text-center">
+            <svg className="w-16 h-16 mx-auto mb-4" style={{ color: 'var(--theme-text-secondary)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
             </svg>
-            <p className="text-lg font-medium text-gray-900 mb-1">No tenants found</p>
-            <p className="text-sm text-gray-500">Try adjusting your search</p>
+            <p className="text-lg font-medium mb-1" style={{ color: 'var(--theme-text)' }}>No tenants found</p>
+            <p className="text-sm" style={{ color: 'var(--theme-text-secondary)' }}>Try adjusting your search</p>
           </div>
         )}
 
         {/* Modal */}
         {showModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div className="bg-white rounded-xl max-w-md w-full max-h-[90vh] overflow-y-auto p-6">
-              <h2 className="text-2xl font-bold mb-6 text-gray-900">
+            <div className="theme-card max-w-md w-full max-h-[90vh] overflow-y-auto p-6">
+              <h2 className="text-2xl font-bold mb-6" style={{ color: 'var(--theme-text)' }}>
                 Add New Tenant
               </h2>
               <div className="space-y-4">
                 <input
                   type="text"
                   placeholder="Full Name"
-                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                  className="w-full px-4 py-2.5 border-2 focus:outline-none transition-all"
+                  style={{
+                    borderColor: 'var(--theme-border)',
+                    borderRadius: 'var(--theme-radius)',
+                    color: 'var(--theme-text)',
+                    backgroundColor: 'var(--theme-surface)'
+                  }}
                   value={formData.full_name}
                   onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
                   required
@@ -309,7 +333,13 @@ export default function Tenants() {
                 <input
                   type="tel"
                   placeholder="Phone Number"
-                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                  className="w-full px-4 py-2.5 border-2 focus:outline-none transition-all"
+                  style={{
+                    borderColor: 'var(--theme-border)',
+                    borderRadius: 'var(--theme-radius)',
+                    color: 'var(--theme-text)',
+                    backgroundColor: 'var(--theme-surface)'
+                  }}
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   required
@@ -317,14 +347,26 @@ export default function Tenants() {
                 <input
                   type="email"
                   placeholder="Email (optional)"
-                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                  className="w-full px-4 py-2.5 border-2 focus:outline-none transition-all"
+                  style={{
+                    borderColor: 'var(--theme-border)',
+                    borderRadius: 'var(--theme-radius)',
+                    color: 'var(--theme-text)',
+                    backgroundColor: 'var(--theme-surface)'
+                  }}
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 />
                 <input
                   type="text"
                   placeholder="Unit Number"
-                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                  className="w-full px-4 py-2.5 border-2 focus:outline-none transition-all"
+                  style={{
+                    borderColor: 'var(--theme-border)',
+                    borderRadius: 'var(--theme-radius)',
+                    color: 'var(--theme-text)',
+                    backgroundColor: 'var(--theme-surface)'
+                  }}
                   value={formData.unit_number}
                   onChange={(e) => setFormData({ ...formData, unit_number: e.target.value })}
                   required
@@ -332,7 +374,13 @@ export default function Tenants() {
                 <input
                   type="number"
                   placeholder="Expected Rent (KES)"
-                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                  className="w-full px-4 py-2.5 border-2 focus:outline-none transition-all"
+                  style={{
+                    borderColor: 'var(--theme-border)',
+                    borderRadius: 'var(--theme-radius)',
+                    color: 'var(--theme-text)',
+                    backgroundColor: 'var(--theme-surface)'
+                  }}
                   value={formData.expected_rent}
                   onChange={(e) => setFormData({ ...formData, expected_rent: e.target.value })}
                   required
@@ -340,25 +388,43 @@ export default function Tenants() {
                 <input
                   type="number"
                   placeholder="Deposit Amount (KES)"
-                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                  className="w-full px-4 py-2.5 border-2 focus:outline-none transition-all"
+                  style={{
+                    borderColor: 'var(--theme-border)',
+                    borderRadius: 'var(--theme-radius)',
+                    color: 'var(--theme-text)',
+                    backgroundColor: 'var(--theme-surface)'
+                  }}
                   value={formData.deposit_amount}
                   onChange={(e) => setFormData({ ...formData, deposit_amount: e.target.value })}
                 />
                 <div>
-                  <label className="block text-sm font-medium mb-2 text-gray-700">Lease Start Date</label>
+                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--theme-text)' }}>Lease Start Date</label>
                   <input
                     type="date"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                    className="w-full px-4 py-2.5 border-2 focus:outline-none transition-all"
+                    style={{
+                      borderColor: 'var(--theme-border)',
+                      borderRadius: 'var(--theme-radius)',
+                      color: 'var(--theme-text)',
+                      backgroundColor: 'var(--theme-surface)'
+                    }}
                     value={formData.lease_start_date}
                     onChange={(e) => setFormData({ ...formData, lease_start_date: e.target.value })}
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-2 text-gray-700">Lease End Date</label>
+                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--theme-text)' }}>Lease End Date</label>
                   <input
                     type="date"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                    className="w-full px-4 py-2.5 border-2 focus:outline-none transition-all"
+                    style={{
+                      borderColor: 'var(--theme-border)',
+                      borderRadius: 'var(--theme-radius)',
+                      color: 'var(--theme-text)',
+                      backgroundColor: 'var(--theme-surface)'
+                    }}
                     value={formData.lease_end_date}
                     onChange={(e) => setFormData({ ...formData, lease_end_date: e.target.value })}
                     required
@@ -366,7 +432,13 @@ export default function Tenants() {
                 </div>
                 <textarea
                   placeholder="Notes (optional)"
-                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                  className="w-full px-4 py-2.5 border-2 focus:outline-none transition-all"
+                  style={{
+                    borderColor: 'var(--theme-border)',
+                    borderRadius: 'var(--theme-radius)',
+                    color: 'var(--theme-text)',
+                    backgroundColor: 'var(--theme-surface)'
+                  }}
                   rows="3"
                   value={formData.notes}
                   onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
@@ -374,13 +446,18 @@ export default function Tenants() {
                 <div className="flex gap-3 pt-2">
                   <button
                     onClick={handleSubmit}
-                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium transition-colors"
+                    className="flex-1 theme-button py-3 rounded-lg font-medium transition-colors"
                   >
                     Save Tenant
                   </button>
                   <button
                     onClick={() => setShowModal(false)}
-                    className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 rounded-lg font-medium transition-colors"
+                    className="flex-1 py-3 rounded-lg font-medium transition-colors"
+                    style={{
+                      backgroundColor: 'var(--theme-background)',
+                      color: 'var(--theme-text)',
+                      border: '1px solid var(--theme-border)'
+                    }}
                   >
                     Cancel
                   </button>
