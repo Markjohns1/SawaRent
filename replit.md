@@ -100,25 +100,72 @@ The following are automatically configured by Replit:
 - `PGHOST`, `PGPORT`, `PGUSER`, `PGPASSWORD`, `PGDATABASE` - PostgreSQL credentials
 
 ### Optional Configuration (Add as Replit Secrets when ready)
-To enable M-Pesa payments, add these secrets:
-```
-MPESA_CONSUMER_KEY=your_consumer_key
-MPESA_CONSUMER_SECRET=your_consumer_secret
-MPESA_SHORTCODE=your_shortcode
-MPESA_PASSKEY=your_passkey
-MPESA_CALLBACK_URL=your_callback_url
-MPESA_ENVIRONMENT=sandbox
-```
 
-To enable SMS notifications (Twilio), add these secrets:
-```
-TWILIO_ACCOUNT_SID=your_account_sid
-TWILIO_AUTH_TOKEN=your_auth_token
-TWILIO_PHONE_NUMBER=your_phone_number
-SMS_PROVIDER=twilio
-```
+## How to Enable M-Pesa Payments
 
-Note: Without credentials, the system will work but M-Pesa and SMS features will be disabled.
+**What you'll need:**
+1. Safaricom Daraja API account (https://developer.safaricom.co.ke/)
+2. Your business shortcode
+3. Consumer Key and Consumer Secret
+4. Passkey for Lipa Na M-Pesa Online
+
+**Setup Steps:**
+1. Register for Daraja API at https://developer.safaricom.co.ke/
+2. Create a new app in the Daraja Portal
+3. Get your Consumer Key and Consumer Secret from the app
+4. Get your Business Shortcode and Passkey
+5. Add these secrets in Replit (click the lock icon on the left sidebar):
+   ```
+   MPESA_CONSUMER_KEY=your_consumer_key_from_daraja
+   MPESA_CONSUMER_SECRET=your_consumer_secret_from_daraja
+   MPESA_SHORTCODE=your_business_shortcode
+   MPESA_PASSKEY=your_passkey_from_daraja
+   MPESA_CALLBACK_URL=https://your-replit-url.repl.co/api/mpesa/callback
+   MPESA_ENVIRONMENT=sandbox  (use 'production' when ready)
+   ```
+
+**How it works:**
+- System automatically initiates M-Pesa payment when tenant selects "M-PESA" payment method
+- Backend generates STK push to tenant's phone
+- Tenant enters M-Pesa PIN on their phone
+- Callback receives confirmation and updates payment record
+- SMS receipt sent automatically (if SMS is configured)
+
+## How to Enable SMS Notifications
+
+**Option 1: Twilio (Recommended)**
+
+**What you'll need:**
+1. Twilio account (https://www.twilio.com/)
+2. Twilio Account SID
+3. Auth Token
+4. Twilio phone number with SMS capability
+
+**Setup Steps:**
+1. Sign up for Twilio at https://www.twilio.com/try-twilio
+2. Verify your phone number
+3. Get a Twilio phone number (trial gives you one for free)
+4. From Twilio Dashboard, copy your Account SID and Auth Token
+5. Add these secrets in Replit:
+   ```
+   TWILIO_ACCOUNT_SID=your_account_sid
+   TWILIO_AUTH_TOKEN=your_auth_token
+   TWILIO_PHONE_NUMBER=+1234567890  (your Twilio number)
+   SMS_PROVIDER=twilio
+   ```
+
+**Option 2: Console Mode (Testing)**
+If you don't have Twilio credentials yet, the system logs SMS to console:
+```
+SMS_PROVIDER=console
+```
+This shows you what would be sent without actually sending SMS.
+
+**How it works:**
+- Payment receipts automatically sent to tenants after payment
+- Rent reminders can be sent from Messaging page
+- Custom messages using templates
+- All SMS logged in database for tracking
 
 ## Key Features (MVP Complete)
 

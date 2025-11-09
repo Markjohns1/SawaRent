@@ -8,6 +8,14 @@ import os
 db = SQLAlchemy()
 login_manager = LoginManager()
 
+@login_manager.user_loader
+def load_user(user_id):
+    from app.models.user import User
+    user = User.query.get(int(user_id))
+    if user and not user.is_active:
+        return None
+    return user
+
 def create_app(config_name='default'):
     app = Flask(__name__)
     app.config.from_object(config[config_name])

@@ -44,6 +44,8 @@ def login():
     user = User.query.filter_by(username=data['username']).first()
     
     if user and user.check_password(data['password']):
+        if not user.is_active:
+            return jsonify({'error': 'Account has been deactivated'}), 403
         login_user(user, remember=True)
         return jsonify({'message': 'Login successful', 'user': user.to_dict()}), 200
     
@@ -65,3 +67,59 @@ def check_session():
     if current_user.is_authenticated:
         return jsonify({'authenticated': True, 'user': current_user.to_dict()}), 200
     return jsonify({'authenticated': False}), 200
+
+@bp.route('/users', methods=['GET'])
+@login_required
+@admin_required
+def get_users():
+    users = User.query.all()
+    return jsonify({'users': [u.to_dict() for u in users]}), 200
+
+@bp.route('/users/<int:user_id>', methods=['PUT'])
+@login_required
+@admin_required
+def update_user(user_id):
+    user = User.query.get_or_404(user_id)
+    data = request.get_json()
+    
+    if 'username' in data and data['username'] != user.username:
+        if User.query.filter_by(username=data['username']).first():
+            return jsonify({'error': 'Username already exists'}), 400
+        user.username = data['username']
+    
+    if 'email' in data and data['email'] != user.email:
+        if User.query.filter_by(email=data['email']).first():
+            return jsonify({'error': 'Email already exists'}), 400
+        user.email = data['email']
+    
+    if 'role' in data:
+        allowed_roles = ['super_admin', 'caretaker', 'tenant']
+        if data['role'] in allowed_roles:
+            user.role = data['role']
+    
+    if 'phone' in data:
+        user.phone = data['phone']
+    
+    if 'full_name' in data:
+        user.full_name = data['full_name']
+    
+    if 'password' in data and data['password']:
+        user.set_password(data['password'])
+    
+    db.session.commit()
+    return jsonify({'message': 'User updated successfully', 'user': user.to_dict()}), 200
+
+@bp.route('/users/<int:user_id>/toggle-active', methods=['POST'])
+@login_required
+@admin_required
+def toggle_user_active(user_id):
+    user = User.query.get_or_404(user_id)
+    
+    if user.id == current_user.id:
+        return jsonify({'error': 'Cannot deactivate your own account'}), 400
+    
+    user.is_active = not user.is_active
+    db.session.commit()
+    
+    status = 'activated' if user.is_active else 'deactivated'
+    return jsonify({'message': f'User {status} successfully', 'user': user.to_dict()}), 200

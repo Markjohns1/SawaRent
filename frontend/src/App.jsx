@@ -6,6 +6,7 @@ import Dashboard from './pages/Dashboard'
 import Tenants from './pages/Tenants'
 import Payments from './pages/Payments'
 import Messaging from './pages/Messaging'
+import Users from './pages/Users'
 import Layout from './components/Layout'
 import api from './services/api'
 
@@ -104,6 +105,18 @@ function App() {
               </Layout>
             ) : (
               <Navigate to="/login" />
+            )
+          }
+        />
+        <Route
+          path="/users"
+          element={
+            user && user.role === 'super_admin' ? (
+              <Layout user={user} onLogout={handleLogout}>
+                <Users />
+              </Layout>
+            ) : (
+              <Navigate to="/" />
             )
           }
         />

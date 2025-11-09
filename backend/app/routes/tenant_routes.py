@@ -92,4 +92,14 @@ def delete_tenant(tenant_id):
     tenant.is_active = False
     db.session.commit()
     
-    return jsonify({'message': 'Tenant deactivated successfully'}), 200
+    return jsonify({'message': 'Tenant marked as moved out successfully'}), 200
+
+@bp.route('/<int:tenant_id>/reactivate', methods=['POST'])
+@login_required
+@admin_or_caretaker_required
+def reactivate_tenant(tenant_id):
+    tenant = Tenant.query.get_or_404(tenant_id)
+    tenant.is_active = True
+    db.session.commit()
+    
+    return jsonify({'message': 'Tenant reactivated successfully'}), 200

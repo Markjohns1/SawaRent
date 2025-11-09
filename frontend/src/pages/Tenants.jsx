@@ -6,6 +6,7 @@ export default function Tenants() {
   const [tenants, setTenants] = useState([])
   const [search, setSearch] = useState('')
   const [showModal, setShowModal] = useState(false)
+  const [activeTab, setActiveTab] = useState('active')
   const { theme } = useTheme()
   const [formData, setFormData] = useState({
     full_name: '',
@@ -21,14 +22,37 @@ export default function Tenants() {
 
   useEffect(() => {
     fetchTenants()
-  }, [search])
+  }, [search, activeTab])
 
   const fetchTenants = async () => {
     try {
-      const response = await api.get(`/tenants?search=${search}`)
+      const isActive = activeTab === 'active'
+      const response = await api.get(`/tenants?search=${search}&is_active=${isActive}`)
       setTenants(response.data.tenants)
     } catch (error) {
       console.error('Failed to fetch tenants:', error)
+    }
+  }
+
+  const handleMarkMovedOut = async (tenantId) => {
+    if (confirm('Mark this tenant as moved out? Their records will be archived.')) {
+      try {
+        await api.delete(`/tenants/${tenantId}`)
+        fetchTenants()
+      } catch (error) {
+        console.error('Failed to mark tenant as moved out:', error)
+      }
+    }
+  }
+
+  const handleReactivate = async (tenantId) => {
+    if (confirm('Reactivate this tenant?')) {
+      try {
+        await api.post(`/tenants/${tenantId}/reactivate`)
+        fetchTenants()
+      } catch (error) {
+        console.error('Failed to reactivate tenant:', error)
+      }
     }
   }
 
@@ -71,7 +95,31 @@ export default function Tenants() {
         </button>
       </div>
 
-      <div className="theme-card p-4">
+      <div className="theme-card p-4 space-y-4">
+        <div className="flex space-x-2 border-b" style={{ borderColor: 'var(--theme-border)' }}>
+          <button
+            onClick={() => setActiveTab('active')}
+            className={`px-4 py-2 font-medium transition-all ${activeTab === 'active' ? 'border-b-2' : ''}`}
+            style={{
+              borderColor: activeTab === 'active' ? 'var(--theme-primary)' : 'transparent',
+              color: activeTab === 'active' ? 'var(--theme-primary)' : 'var(--theme-text-secondary)'
+            }}
+          >
+            <i className="fas fa-check-circle mr-2"></i>
+            Active Tenants
+          </button>
+          <button
+            onClick={() => setActiveTab('inactive')}
+            className={`px-4 py-2 font-medium transition-all ${activeTab === 'inactive' ? 'border-b-2' : ''}`}
+            style={{
+              borderColor: activeTab === 'inactive' ? 'var(--theme-primary)' : 'transparent',
+              color: activeTab === 'inactive' ? 'var(--theme-primary)' : 'var(--theme-text-secondary)'
+            }}
+          >
+            <i className="fas fa-archive mr-2"></i>
+            Moved Out ({tenants.length})
+          </button>
+        </div>
         <input
           type="text"
           placeholder="Search by name, phone, unit..."
@@ -135,6 +183,35 @@ export default function Tenants() {
                   {new Date(tenant.lease_end_date).toLocaleDateString()}
                 </span>
               </div>
+            </div>
+            <div className="mt-4">
+              {tenant.is_active ? (
+                <button
+                  onClick={() => handleMarkMovedOut(tenant.id)}
+                  className="w-full px-4 py-2 text-sm font-medium rounded transition-opacity hover:opacity-80"
+                  style={{
+                    backgroundColor: '#6b7280',
+                    color: 'white',
+                    borderRadius: 'var(--theme-radius)'
+                  }}
+                >
+                  <i className="fas fa-box-archive mr-2"></i>
+                  Mark as Moved Out
+                </button>
+              ) : (
+                <button
+                  onClick={() => handleReactivate(tenant.id)}
+                  className="w-full px-4 py-2 text-sm font-medium rounded transition-opacity hover:opacity-80"
+                  style={{
+                    backgroundColor: '#10b981',
+                    color: 'white',
+                    borderRadius: 'var(--theme-radius)'
+                  }}
+                >
+                  <i className="fas fa-rotate-right mr-2"></i>
+                  Reactivate Tenant
+                </button>
+              )}
             </div>
           </div>
         ))}
