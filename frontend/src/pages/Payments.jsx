@@ -150,7 +150,7 @@ export default function Payments() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="theme-card max-w-md w-full max-h-screen overflow-y-auto p-6">
             <h2 className="text-2xl font-bold mb-6" style={{ color: 'var(--theme-text)' }}>
-              'Log Payment' : 'Log Payment'}
+              Log Payment
             </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>

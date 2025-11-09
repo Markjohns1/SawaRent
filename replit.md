@@ -13,30 +13,43 @@ A comprehensive property management system for landlords, caretakers, and tenant
 - Workflow configured and running
 
 ## Recent Changes (November 9, 2025)
-- ✅ Configured for Replit environment
-- ✅ Fixed backend to use localhost:8000
-- ✅ Added `allowedHosts: true` to Vite config for proxy support
+
+### Migration to Replit Environment
+- ✅ Migrated from SQLite to PostgreSQL database
+- ✅ Configured DATABASE_URL and SESSION_SECRET environment variables
+- ✅ Updated backend config to use PostgreSQL with connection pooling
+- ✅ Fixed backend to run on port 8000 (localhost)
+- ✅ Frontend runs on port 5000 with Vite proxy to backend
+- ✅ Installed all Python and Node.js dependencies
 - ✅ Created unified startup script (start_all.sh)
-- ✅ Installed all dependencies (Python + Node.js)
-- ✅ Initialized database with sample tenants and templates
-- ✅ Configured deployment settings
-- ✅ Updated .gitignore to preserve Replit config files
-- ✅ **Implemented Dual Theme System (Friendly & Formal)**
+- ✅ Configured deployment for Autoscale with Gunicorn
+
+### UI Improvements
+- ✅ **Added Professional Icons** (Font Awesome)
+  - Replaced text-based logo with building icon
+  - Professional icon-based design throughout
+- ✅ **Enhanced Theme System** (Formal, Dark, Friendly)
+  - Added Dark theme with navy blue background
+  - Professional theme toggle button with icons (sun/moon/half-circle)
+  - Three-way theme rotation: Formal → Dark → Friendly → Formal
   - Theme Context with localStorage persistence
-  - Friendly Theme: Warm orange, rounded corners, Quicksand font, emojis
-  - Formal Theme: Professional blue, sharp edges, Inter font, minimalist
-  - Theme toggle in navigation bar
   - All pages enhanced with theme-aware styling
-  - Mobile-first responsive design improvements
+
+### Backend Configuration
+- ✅ M-Pesa integration configured (ready for API credentials)
+- ✅ SMS/Twilio integration configured (ready for API credentials)
+  - Note: User dismissed Replit Twilio integration, using manual configuration
+  - Backend supports both Twilio and console-based SMS providers
 
 ## Project Architecture
 
 ### Backend (`/backend`)
-- Framework: Flask 3.1.2
-- Database: SQLite at `/database/property_management.db`
+- Framework: Flask 3.0.0
+- Database: PostgreSQL (Neon - via DATABASE_URL)
 - API Port: 8000 (localhost only)
 - Models: Users, Tenants, Payments, Templates, SMSLogs, Alerts
 - Security: RBAC with role-based decorators
+- Session Secret: Managed via SESSION_SECRET environment variable
 
 ### Frontend (`/frontend`)
 - Framework: React 18 + Vite 5
@@ -76,28 +89,32 @@ bash start_all.sh
 
 ## Environment Configuration
 
-### Required Environment Variables
-Create a `.env` file in the backend directory:
+### Environment Variables
+The following are automatically configured by Replit:
+- `DATABASE_URL` - PostgreSQL connection string
+- `SESSION_SECRET` - Flask session secret key
+- `PGHOST`, `PGPORT`, `PGUSER`, `PGPASSWORD`, `PGDATABASE` - PostgreSQL credentials
 
+### Optional Configuration (Add as Replit Secrets when ready)
+To enable M-Pesa payments, add these secrets:
 ```
-FLASK_ENV=development
-SECRET_KEY=dev-secret-key-change-in-production
-TIMEZONE=Africa/Nairobi
-
-# M-PESA Configuration (optional for MVP)
-MPESA_CONSUMER_KEY=
-MPESA_CONSUMER_SECRET=
-MPESA_SHORTCODE=
-MPESA_PASSKEY=
-MPESA_CALLBACK_URL=
+MPESA_CONSUMER_KEY=your_consumer_key
+MPESA_CONSUMER_SECRET=your_consumer_secret
+MPESA_SHORTCODE=your_shortcode
+MPESA_PASSKEY=your_passkey
+MPESA_CALLBACK_URL=your_callback_url
 MPESA_ENVIRONMENT=sandbox
-
-# SMS Configuration (optional for MVP)
-SMS_PROVIDER=console
-TWILIO_ACCOUNT_SID=
-TWILIO_AUTH_TOKEN=
-TWILIO_PHONE_NUMBER=
 ```
+
+To enable SMS notifications (Twilio), add these secrets:
+```
+TWILIO_ACCOUNT_SID=your_account_sid
+TWILIO_AUTH_TOKEN=your_auth_token
+TWILIO_PHONE_NUMBER=your_phone_number
+SMS_PROVIDER=twilio
+```
+
+Note: Without credentials, the system will work but M-Pesa and SMS features will be disabled.
 
 ## Key Features (MVP Complete)
 
