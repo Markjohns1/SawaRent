@@ -123,3 +123,23 @@ def toggle_user_active(user_id):
     
     status = 'activated' if user.is_active else 'deactivated'
     return jsonify({'message': f'User {status} successfully', 'user': user.to_dict()}), 200
+
+
+@bp.route('/users/<int:user_id>', methods=['DELETE'])
+@login_required
+@admin_required
+def delete_user(user_id):
+    user = User.query.get_or_404(user_id)
+    
+    # Prevent deleting yourself
+    if user.id == current_user.id:
+        return jsonify({'error': 'Cannot delete your own account'}), 400
+    
+    # Store username for response message
+    username = user.username
+    
+    # Delete the user
+    db.session.delete(user)
+    db.session.commit()
+    
+    return jsonify({'message': f'User {username} deleted successfully'}), 200
