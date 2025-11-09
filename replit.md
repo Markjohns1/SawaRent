@@ -4,13 +4,17 @@
 A comprehensive property management system for landlords, caretakers, and tenants in Kenya. Built with Flask backend, React frontend, and SQLite database. Handles rent collection, tenant management, M-PESA payment integration, automated SMS notifications, and lease tracking.
 
 ## Current State
-✅ **Replit Environment Setup Complete**
-- Full-stack application running successfully
-- Frontend: React + Vite on port 5000
-- Backend: Flask API on port 8000 (localhost)
-- Database initialized with sample data
-- All dependencies installed
-- Workflow configured and running
+✅ **Production-Ready System**
+- Full-stack application running successfully on Replit
+- Frontend: React + Vite on port 5000 (exposed to web)
+- Backend: Flask API on port 8000 (internal)
+- PostgreSQL database initialized with sample data
+- All dependencies installed (Python 3.11 + Node.js 20)
+- Workflow configured and auto-starts on launch
+- Professional UI with Font Awesome icons
+- Three-theme system (Formal, Dark, Friendly)
+- Messaging templates display professionally (no raw placeholders visible)
+- M-Pesa and SMS integrations ready for credentials
 
 ## Recent Changes (November 9, 2025)
 
@@ -151,10 +155,21 @@ For production deployment, the Flask backend needs to be configured to serve the
 2. Configuring Flask to serve React build from `/frontend/dist`
 3. Ensuring all API routes are prefixed with `/api`
 
-## Sample Data
-- 5 sample tenants with varying rent amounts
-- 6 message templates (receipt, reminder, follow_up themes)
-- 2 user accounts (admin and caretaker)
+## Sample Data (Already Initialized)
+The database has been initialized with:
+- **2 user accounts:**
+  - Admin (username: admin, password: admin123) - Super Admin
+  - Caretaker (username: caretaker, password: care123) - Caretaker role
+- **5 sample tenants:** Jane Wanjiku, Peter Kamau, Mary Njeri, David Ochieng, Grace Akinyi
+  - Units: A101, A102, B201, B202, C301
+  - Rent amounts: KES 15,000 - 22,000
+  - Various lease start/end dates
+- **6 message templates:**
+  - Payment Receipt (Formal & Friendly)
+  - Rent Reminder (Formal & Friendly)
+  - Partial Payment Follow-up (Formal & Friendly)
+  
+**Note:** Templates display with preview text (e.g., "John Doe", "A101") instead of raw placeholders. The system replaces these with actual values when sending messages.
 
 ## User Preferences
 - Clean, modular, scalable architecture
