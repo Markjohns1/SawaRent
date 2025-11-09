@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { ThemeProvider } from './context/ThemeContext'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import Tenants from './pages/Tenants'
@@ -51,8 +52,9 @@ function App() {
   }
 
   return (
-    <Router>
-      <Routes>
+    <ThemeProvider>
+      <Router>
+        <Routes>
         <Route
           path="/login"
           element={user ? <Navigate to="/" /> : <Login onLogin={handleLogin} />}
@@ -105,8 +107,9 @@ function App() {
             )
           }
         />
-      </Routes>
-    </Router>
+        </Routes>
+      </Router>
+    </ThemeProvider>
   )
 }
 

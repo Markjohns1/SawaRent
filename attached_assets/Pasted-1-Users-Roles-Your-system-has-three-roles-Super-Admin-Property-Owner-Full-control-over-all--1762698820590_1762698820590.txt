@@ -1,0 +1,122 @@
+1. Users / Roles
+
+Your system has three roles:
+
+Super Admin (Property Owner)
+
+Full control over all buildings, tenants, and caretakers
+
+Can view dashboards, payments, tenant info
+
+Can send messages (templated/custom)
+
+Caretaker
+
+Logs manual payments
+
+Views tenant info, dashboard summaries
+
+Sends messages via pre-defined templates or free-text
+
+Receives alerts on payments
+
+Tenant/User
+
+Views payment history and status
+
+Receives messages (reminders, alerts, notices)
+
+Can send limited messages via templates to caretaker or super admin
+
+2. Backend (Flask + SQLite)
+
+Core Features:
+
+Database models: tenants, payments, templates, messages, users, roles
+
+Payment management:
+
+Log manual payments
+
+Auto-match M-PESA payments
+
+Track partial payments & remaining amounts
+
+Audit trail for disputes
+
+Messaging:
+
+Templated SMS/WhatsApp messages with dynamic placeholders
+
+Free-text messaging for flexibility
+
+Logs for all sent messages
+
+Authentication & Roles: secure login, role-based access
+
+Dashboard data APIs: payment status summaries, due reminders
+
+Search: global search by tenant ID, name, or phone
+
+Optional / Future Enhancements:
+
+Payment analytics
+
+Lease expiry reminders
+
+Multi-building support
+
+3. Frontend (React + Tailwind + Vite)
+
+Core Pages / Components:
+
+Login Page: role-based authentication
+
+Dashboard: color-coded statuses (Paid / Partial / Overdue)
+
+Payments Page: log payments, show auto-match results, partial payments
+
+Tenants Page: searchable table of tenants, lease info, payment history
+
+Messaging Page: send templated or free-text messages
+
+Components: reusable UI (cards, tables, forms, modal dialogues)
+
+UI Principles:
+
+Mobile-first, easy for caretakers 40+
+
+Minimal typing, minimal clicks
+
+Use alignment, color, and spacing for clarity instead of large buttons
+
+Two themes: Friendly & Formal
+
+4. Infrastructure
+
+Backend server: Flask app running on Linux VPS or local
+
+Database: SQLite (lightweight, easy for MVP)
+
+Frontend: Vite dev server + Tailwind styling
+
+Version control: Git/GitHub
+
+Environment: Python venv for backend, npm for frontend
+
+Timezone: Nairobi (GMT+3)
+
+5. Features Checklist
+Feature	Description	Priority
+Tenant database	Track tenants, leases, deposits	High
+Payment logging	Manual + auto-match M-PESA	High
+Partial payment handling	Track remaining amount	High
+Dashboard	Paid/due/late visual summary	High
+Messaging	Templates + free-text, SMS/WhatsApp	High
+Authentication	Role-based login	High
+Search	Global search by ID/name/phone	Medium
+Themes	Friendly/Formal	Medium
+Audit trail	Payment and messaging logs	Medium
+Notifications	Reminders to tenant & caretaker	Medium
+Lease tracking	Renewal and expiry alerts	Medium
+Deployment	Linux VPS ready, dev/prod config	High

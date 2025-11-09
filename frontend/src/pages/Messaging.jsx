@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useTheme } from '../context/ThemeContext'
 import api from '../services/api'
 
 export default function Messaging() {
@@ -6,6 +7,7 @@ export default function Messaging() {
   const [tenants, setTenants] = useState([])
   const [smsLogs, setSmsLogs] = useState([])
   const [showModal, setShowModal] = useState(false)
+  const { theme } = useTheme()
   const [formData, setFormData] = useState({
     tenant_id: '',
     template_id: '',
@@ -71,49 +73,83 @@ export default function Messaging() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-900">Messaging</h1>
+        <h1 className="text-3xl font-bold" style={{ color: 'var(--theme-text)' }}>
+          'Messaging' : 'Messaging'}
+        </h1>
         <button
           onClick={() => setShowModal(true)}
-          className="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700"
+          className="theme-button px-4 py-2 font-medium flex items-center space-x-2"
         >
-          Send SMS
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+          </svg>
+          <span>Send SMS</span>
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold mb-4">Message Templates</h2>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="theme-card p-6">
+          <h2 className="text-xl font-bold mb-4 flex items-center space-x-2" style={{ color: 'var(--theme-text)' }}>
+            <span>{theme === 'friendly' ? '📝' : ''}</span>
+            <span>Message Templates</span>
+          </h2>
           <div className="space-y-3">
             {templates.map((template) => (
-              <div key={template.id} className="p-4 border rounded-lg">
+              <div key={template.id} className="p-4 border-2 transition-all hover:scale-102"
+                style={{
+                  borderColor: 'var(--theme-border)',
+                  borderRadius: 'var(--theme-radius)',
+                }}
+              >
                 <div className="flex justify-between items-start mb-2">
-                  <h3 className="font-medium">{template.name}</h3>
-                  <span className="text-xs px-2 py-1 bg-gray-100 rounded">{template.theme}</span>
+                  <h3 className="font-semibold" style={{ color: 'var(--theme-text)' }}>{template.name}</h3>
+                  <span
+                    className="text-xs px-2 py-1 font-medium"
+                    style={{
+                      backgroundColor: template.theme === 'friendly' ? (theme === 'friendly' ? '#fed7aa' : '#fef3c7') : (theme === 'friendly' ? '#dbeafe' : '#e0e7ff'),
+                      color: 'var(--theme-text)',
+                      borderRadius: theme === 'friendly' ? '1rem' : '0.375rem',
+                    }}
+                  >
+                    {template.theme}
+                  </span>
                 </div>
-                <p className="text-sm text-gray-600">{template.content}</p>
+                <p className="text-sm" style={{ color: 'var(--theme-text-secondary)' }}>{template.content}</p>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold mb-4">Recent SMS</h2>
-          <div className="space-y-3">
-            {smsLogs.slice(0, 10).map((log) => (
-              <div key={log.id} className="p-4 border rounded-lg">
+        <div className="theme-card p-6">
+          <h2 className="text-xl font-bold mb-4 flex items-center space-x-2" style={{ color: 'var(--theme-text)' }}>
+            <span>{theme === 'friendly' ? '📨' : ''}</span>
+            <span>Recent SMS</span>
+          </h2>
+          <div className="space-y-3 max-h-[600px] overflow-y-auto">
+            {smsLogs.slice(0, 20).map((log) => (
+              <div key={log.id} className="p-4 border-2 transition-all"
+                style={{
+                  borderColor: 'var(--theme-border-light)',
+                  borderRadius: 'var(--theme-radius)',
+                }}
+              >
                 <div className="flex justify-between items-start mb-2">
                   <div>
-                    <div className="font-medium">{log.recipient_name}</div>
-                    <div className="text-xs text-gray-500">{log.recipient_phone}</div>
+                    <div className="font-semibold" style={{ color: 'var(--theme-text)' }}>{log.recipient_name}</div>
+                    <div className="text-xs" style={{ color: 'var(--theme-text-secondary)' }}>{log.recipient_phone}</div>
                   </div>
-                  <span className={`text-xs px-2 py-1 rounded ${
-                    log.status === 'sent' ? 'bg-success text-white' : 'bg-danger text-white'
-                  }`}>
+                  <span
+                    className="text-xs px-2 py-1 font-medium text-white"
+                    style={{
+                      backgroundColor: log.status === 'sent' ? (theme === 'friendly' ? '#34d399' : '#059669') : (theme === 'friendly' ? '#f87171' : '#dc2626'),
+                      borderRadius: theme === 'friendly' ? '1rem' : '0.375rem',
+                    }}
+                  >
                     {log.status}
                   </span>
                 </div>
-                <p className="text-sm text-gray-600">{log.message}</p>
-                <div className="text-xs text-gray-400 mt-2">
+                <p className="text-sm mb-2" style={{ color: 'var(--theme-text)' }}>{log.message}</p>
+                <div className="text-xs" style={{ color: 'var(--theme-text-secondary)' }}>
                   {new Date(log.sent_at).toLocaleString()}
                 </div>
               </div>
@@ -124,13 +160,20 @@ export default function Messaging() {
 
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full">
-            <h2 className="text-xl font-bold mb-4">Send SMS</h2>
+          <div className="theme-card max-w-md w-full max-h-screen overflow-y-auto p-6">
+            <h2 className="text-2xl font-bold mb-6" style={{ color: 'var(--theme-text)' }}>
+              {theme === 'friendly' ? 'Send SMS' : 'Send SMS'}
+            </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-1">Tenant</label>
+                <label className="block text-sm font-medium mb-2" style={{ color: 'var(--theme-text)' }}>Tenant</label>
                 <select
-                  className="w-full px-3 py-2 border rounded-md"
+                  className="w-full px-4 py-3 border-2 focus:outline-none transition-all"
+                  style={{
+                    borderColor: 'var(--theme-border)',
+                    borderRadius: 'var(--theme-radius)',
+                    color: 'var(--theme-text)',
+                  }}
                   value={formData.tenant_id}
                   onChange={(e) => setFormData({ ...formData, tenant_id: e.target.value })}
                   required
@@ -144,9 +187,14 @@ export default function Messaging() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Template (optional)</label>
+                <label className="block text-sm font-medium mb-2" style={{ color: 'var(--theme-text)' }}>Template (optional)</label>
                 <select
-                  className="w-full px-3 py-2 border rounded-md"
+                  className="w-full px-4 py-3 border-2 focus:outline-none transition-all"
+                  style={{
+                    borderColor: 'var(--theme-border)',
+                    borderRadius: 'var(--theme-radius)',
+                    color: 'var(--theme-text)',
+                  }}
                   value={formData.template_id}
                   onChange={(e) => setFormData({ ...formData, template_id: e.target.value })}
                 >
@@ -158,25 +206,38 @@ export default function Messaging() {
                   ))}
                 </select>
               </div>
-              <textarea
-                placeholder="Message"
-                className="w-full px-3 py-2 border rounded-md"
-                rows="4"
-                value={formData.message}
-                onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                required={!formData.template_id}
-              />
-              <div className="flex space-x-3">
+              <div>
+                <label className="block text-sm font-medium mb-2" style={{ color: 'var(--theme-text)' }}>Message</label>
+                <textarea
+                  className="w-full px-4 py-3 border-2 focus:outline-none transition-all"
+                  style={{
+                    borderColor: 'var(--theme-border)',
+                    borderRadius: 'var(--theme-radius)',
+                    color: 'var(--theme-text)',
+                  }}
+                  rows="4"
+                  placeholder="Type your message here..."
+                  value={formData.message}
+                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  required={!formData.template_id}
+                />
+              </div>
+              <div className="flex space-x-3 pt-4">
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700"
+                  className="flex-1 theme-button px-4 py-3 font-medium"
                 >
-                  Send
+                  Send SMS
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
+                  className="flex-1 px-4 py-3 font-medium transition-all"
+                  style={{
+                    backgroundColor: '#e5e7eb',
+                    color: '#374151',
+                    borderRadius: 'var(--theme-radius)',
+                  }}
                 >
                   Cancel
                 </button>
