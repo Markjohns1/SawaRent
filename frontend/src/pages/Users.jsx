@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { useTheme } from '../context/ThemeContext'
 import api from '../services/api'
 
-export default function Users() {
+export default function Users({ currentUser }) {
   const [users, setUsers] = useState([])
   const [showModal, setShowModal] = useState(false)
   const [editingUser, setEditingUser] = useState(null)
@@ -171,14 +171,16 @@ export default function Users() {
                           <i className="fas fa-edit mr-1"></i>
                           Edit
                         </button>
-                        <button
-                          onClick={() => handleToggleActive(user.id)}
-                          className="text-sm px-3 py-1 rounded hover:opacity-80 transition-opacity"
-                          style={{ backgroundColor: user.is_active ? '#6b7280' : '#10b981', color: 'white' }}
-                        >
-                          <i className={`fas fa-${user.is_active ? 'ban' : 'check'} mr-1`}></i>
-                          {user.is_active ? 'Deactivate' : 'Activate'}
-                        </button>
+                        {currentUser?.id !== user.id && (
+                          <button
+                            onClick={() => handleToggleActive(user.id)}
+                            className="text-sm px-3 py-1 rounded hover:opacity-80 transition-opacity"
+                            style={{ backgroundColor: user.is_active ? '#6b7280' : '#10b981', color: 'white' }}
+                          >
+                            <i className={`fas fa-${user.is_active ? 'ban' : 'check'} mr-1`}></i>
+                            {user.is_active ? 'Deactivate' : 'Activate'}
+                          </button>
+                        )}
                       </div>
                     </td>
                   </tr>
@@ -322,3 +324,4 @@ export default function Users() {
     </div>
   )
 }
+

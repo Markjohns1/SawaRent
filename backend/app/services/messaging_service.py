@@ -1,4 +1,4 @@
-from flask import current_app
+﻿from flask import current_app
 from app.models.template import Template
 from app import db
 
@@ -9,9 +9,20 @@ class MessagingService:
     def send_sms(self, phone, message, recipient_name=''):
         if self.provider == 'twilio':
             return self._send_via_twilio(phone, message)
+        elif self.provider == 'mock':
+            return self._send_via_mock(phone, message, recipient_name)
         else:
             current_app.logger.info(f'SMS to {phone} ({recipient_name}): {message}')
             return True
+    
+    def _send_via_mock(self, phone, message, recipient_name=''):
+        """Mock SMS sending for development - logs instead of actually sending"""
+        current_app.logger.info('='*50)
+        current_app.logger.info('📱 MOCK SMS SENT')
+        current_app.logger.info(f'To: {phone} ({recipient_name})')
+        current_app.logger.info(f'Message: {message}')
+        current_app.logger.info('='*50)
+        return True
     
     def _send_via_twilio(self, phone, message):
         try:
@@ -26,7 +37,6 @@ class MessagingService:
                 return False
             
             client = Client(account_sid, auth_token)
-            
             message = client.messages.create(
                 body=message,
                 from_=from_phone,

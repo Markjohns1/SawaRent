@@ -1,7 +1,8 @@
-from flask import Blueprint, request, jsonify
+﻿from flask import Blueprint, request, jsonify
 from flask_login import login_required
 from app import db
 from app.models.tenant import Tenant
+from app.models.user import User
 from app.utils.decorators import admin_or_caretaker_required
 from datetime import datetime
 
@@ -13,9 +14,9 @@ bp = Blueprint('tenants', __name__, url_prefix='/api/tenants')
 def get_tenants():
     search = request.args.get('search', '')
     is_active = request.args.get('is_active', 'true').lower() == 'true'
-    
+
     query = Tenant.query.filter_by(is_active=is_active)
-    
+
     if search:
         search_filter = f'%{search}%'
         query = query.filter(
@@ -26,7 +27,7 @@ def get_tenants():
                 Tenant.email.ilike(search_filter)
             )
         )
-    
+
     tenants = query.all()
     return jsonify({'tenants': [t.to_dict() for t in tenants]}), 200
 
@@ -42,7 +43,20 @@ def get_tenant(tenant_id):
 @admin_or_caretaker_required
 def create_tenant():
     data = request.get_json()
-    
+
+    # Check if user_id is provided and valid
+    user_id = data.get('user_id')
+    if user_id:
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({'error': 'User not found'}), 404
+        if user.role != 'tenant':
+            return jsonify({'error': 'Linked user must have tenant role'}), 400
+        # Check if this user is already linked to another tenant
+        existing = Tenant.query.filter_by(user_id=user_id).first()
+        if existing:
+            return jsonify({'error': 'This user is already linked to another tenant'}), 400
+
     tenant = Tenant(
         full_name=data['full_name'],
         phone=data['phone'],
@@ -52,12 +66,13 @@ def create_tenant():
         deposit_amount=data.get('deposit_amount', 0.0),
         lease_start_date=datetime.fromisoformat(data['lease_start_date']).date(),
         lease_end_date=datetime.fromisoformat(data['lease_end_date']).date(),
-        notes=data.get('notes', '')
+        notes=data.get('notes', ''),
+        user_id=user_id
     )
-    
+
     db.session.add(tenant)
     db.session.commit()
-    
+
     return jsonify({'message': 'Tenant created successfully', 'tenant': tenant.to_dict()}), 201
 
 @bp.route('/<int:tenant_id>', methods=['PUT'])
@@ -66,7 +81,7 @@ def create_tenant():
 def update_tenant(tenant_id):
     tenant = Tenant.query.get_or_404(tenant_id)
     data = request.get_json()
-    
+
     tenant.full_name = data.get('full_name', tenant.full_name)
     tenant.phone = data.get('phone', tenant.phone)
     tenant.email = data.get('email', tenant.email)
@@ -74,14 +89,29 @@ def update_tenant(tenant_id):
     tenant.expected_rent = data.get('expected_rent', tenant.expected_rent)
     tenant.deposit_amount = data.get('deposit_amount', tenant.deposit_amount)
     tenant.notes = data.get('notes', tenant.notes)
-    
+
+    # Handle user_id updates
+    if 'user_id' in data:
+        new_user_id = data['user_id']
+        if new_user_id and new_user_id != tenant.user_id:
+            user = User.query.get(new_user_id)
+            if not user:
+                return jsonify({'error': 'User not found'}), 404
+            if user.role != 'tenant':
+                return jsonify({'error': 'Linked user must have tenant role'}), 400
+            # Check if already linked
+            existing = Tenant.query.filter_by(user_id=new_user_id).first()
+            if existing and existing.id != tenant_id:
+                return jsonify({'error': 'This user is already linked to another tenant'}), 400
+        tenant.user_id = new_user_id if new_user_id else None
+
     if 'lease_start_date' in data:
         tenant.lease_start_date = datetime.fromisoformat(data['lease_start_date']).date()
     if 'lease_end_date' in data:
         tenant.lease_end_date = datetime.fromisoformat(data['lease_end_date']).date()
-    
+
     db.session.commit()
-    
+
     return jsonify({'message': 'Tenant updated successfully', 'tenant': tenant.to_dict()}), 200
 
 @bp.route('/<int:tenant_id>', methods=['DELETE'])
@@ -91,7 +121,7 @@ def delete_tenant(tenant_id):
     tenant = Tenant.query.get_or_404(tenant_id)
     tenant.is_active = False
     db.session.commit()
-    
+
     return jsonify({'message': 'Tenant marked as moved out successfully'}), 200
 
 @bp.route('/<int:tenant_id>/reactivate', methods=['POST'])
@@ -101,5 +131,5 @@ def reactivate_tenant(tenant_id):
     tenant = Tenant.query.get_or_404(tenant_id)
     tenant.is_active = True
     db.session.commit()
-    
+
     return jsonify({'message': 'Tenant reactivated successfully'}), 200

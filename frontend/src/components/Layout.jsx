@@ -1,6 +1,15 @@
-import { Link, useLocation } from 'react-router-dom'
+﻿import { Link, useLocation } from 'react-router-dom'
 import ThemeToggle from './ThemeToggle'
 import { useTheme } from '../context/ThemeContext'
+
+const formatRole = (role) => {
+  const roleMap = {
+    'super_admin': 'Super Admin',
+    'caretaker': 'Caretaker',
+    'tenant': 'Tenant'
+  }
+  return roleMap[role] || role
+}
 
 export default function Layout({ user, onLogout, children }) {
   const location = useLocation()
@@ -101,7 +110,7 @@ export default function Layout({ user, onLogout, children }) {
                   </div>
                   <div className="flex flex-col">
                     <span className="text-sm font-medium" style={{ color: 'var(--theme-text)' }}>{user.full_name || user.username}</span>
-                    <span className="text-xs" style={{ color: 'var(--theme-text-secondary)' }}>{user.role}</span>
+                    <span className="text-xs" style={{ color: 'var(--theme-text-secondary)' }}>{formatRole(user.role)}</span>
                   </div>
                 </div>
                 <button
@@ -138,3 +147,4 @@ export default function Layout({ user, onLogout, children }) {
     </div>
   )
 }
+

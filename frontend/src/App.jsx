@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { ThemeProvider } from './context/ThemeContext'
 import Login from './pages/Login'
@@ -113,7 +113,7 @@ function App() {
           element={
             user && user.role === 'super_admin' ? (
               <Layout user={user} onLogout={handleLogout}>
-                <Users />
+                <Users currentUser={user} />
               </Layout>
             ) : (
               <Navigate to="/" />
@@ -127,3 +127,4 @@ function App() {
 }
 
 export default App
+

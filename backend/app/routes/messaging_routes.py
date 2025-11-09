@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+﻿from flask import Blueprint, request, jsonify
 from flask_login import login_required, current_user
 from app import db
 from app.models.template import Template
@@ -87,3 +87,43 @@ def send_sms():
 def get_sms_logs():
     logs = SMSLog.query.order_by(SMSLog.sent_at.desc()).limit(100).all()
     return jsonify({'sms_logs': [log.to_dict() for log in logs]}), 200
+@bp.route('/templates/<int:template_id>', methods=['PUT'])
+@login_required
+@admin_required
+def update_template(template_id):
+    template = Template.query.get_or_404(template_id)
+    data = request.get_json()
+    
+    template.name = data.get('name', template.name)
+    template.category = data.get('category', template.category)
+    template.theme = data.get('theme', template.theme)
+    template.content = data.get('content', template.content)
+    
+    db.session.commit()
+    return jsonify({'message': 'Template updated successfully', 'template': template.to_dict()}), 200
+
+@bp.route('/templates/<int:template_id>', methods=['DELETE'])
+@login_required
+@admin_required
+def delete_template(template_id):
+    template = Template.query.get_or_404(template_id)
+    template.is_active = False
+    db.session.commit()
+    return jsonify({'message': 'Template deleted successfully'}), 200
+
+@bp.route('/sms-logs/<int:log_id>', methods=['DELETE'])
+@login_required
+@admin_or_caretaker_required
+def delete_sms_log(log_id):
+    log = SMSLog.query.get_or_404(log_id)
+    db.session.delete(log)
+    db.session.commit()
+    return jsonify({'message': 'SMS log deleted successfully'}), 200
+
+@bp.route('/sms-logs', methods=['DELETE'])
+@login_required
+@admin_required
+def clear_all_sms_logs():
+    SMSLog.query.delete()
+    db.session.commit()
+    return jsonify({'message': 'All SMS logs cleared successfully'}), 200

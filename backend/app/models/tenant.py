@@ -1,10 +1,10 @@
-from app import db
+﻿from app import db
 from datetime import datetime
 import pytz
 
 class Tenant(db.Model):
     __tablename__ = 'tenants'
-    
+
     id = db.Column(db.Integer, primary_key=True)
     full_name = db.Column(db.String(120), nullable=False)
     phone = db.Column(db.String(20), nullable=False)
@@ -16,15 +16,20 @@ class Tenant(db.Model):
     lease_end_date = db.Column(db.Date, nullable=False)
     is_active = db.Column(db.Boolean, default=True)
     notes = db.Column(db.Text)
+    
+    # Optional link to user account (if tenant has system access)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
+    
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(pytz.timezone('Africa/Nairobi')))
     updated_at = db.Column(db.DateTime, default=lambda: datetime.now(pytz.timezone('Africa/Nairobi')), onupdate=lambda: datetime.now(pytz.timezone('Africa/Nairobi')))
-    
+
     payments = db.relationship('Payment', backref='tenant', lazy=True, cascade='all, delete-orphan')
-    
+    user = db.relationship('User', backref='tenant_profile', uselist=False)
+
     def get_initials(self):
         parts = self.full_name.split()
         return ''.join([p[0].upper() for p in parts if p])
-    
+
     def to_dict(self):
         return {
             'id': self.id,
@@ -39,5 +44,7 @@ class Tenant(db.Model):
             'is_active': self.is_active,
             'notes': self.notes,
             'initials': self.get_initials(),
+            'user_id': self.user_id,
+            'has_login': self.user_id is not None,
             'created_at': self.created_at.isoformat() if self.created_at else None
         }
