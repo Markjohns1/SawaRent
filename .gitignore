@@ -178,13 +178,6 @@ Temporary Items
 auto-save-list
 tramp
 
-# ==================== Replit (REMOVE) ====================
-.replit
-replit.nix
-.replit.nix
-replit.toml
-.config/replit/
-
 # ==================== Project Specific ====================
 # Migrations (keep migration files, not database)
 backend/migrations/versions/*.pyc
