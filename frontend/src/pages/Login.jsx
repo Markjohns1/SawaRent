@@ -33,20 +33,20 @@ export default function Login({ onLogin }) {
         <div className="text-center">
           <div className="flex justify-center mb-4">
             <div 
-              className="h-20 w-20 flex items-center justify-center text-white text-3xl font-bold"
+              className="h-20 w-20 flex items-center justify-center text-white text-3xl"
               style={{
                 backgroundColor: 'var(--theme-primary)',
                 borderRadius: 'var(--theme-radius)',
               }}
             >
-              PM
+              <i className="fas fa-building"></i>
             </div>
           </div>
           <h2 className="text-4xl font-extrabold" style={{ color: 'var(--theme-text)' }}>
-            {theme === 'friendly' ? 'Welcome Back!' : 'Property Management'}
+            Property Management
           </h2>
           <p className="mt-3 text-lg" style={{ color: 'var(--theme-text-secondary)' }}>
-            {theme === 'friendly' ? 'Sign in to manage your properties' : 'Sign in to your account'}
+            Sign in to your account
           </p>
         </div>
         <form className="mt-8 space-y-6 theme-card p-8" onSubmit={handleSubmit}>
