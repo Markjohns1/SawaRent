@@ -1,0 +1,249 @@
+# ============================================
+# SawaRent Property Management - .gitignore
+# ============================================
+
+# ==================== Python ====================
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Flask specific
+instance/
+.webassets-cache
+
+# Virtual environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+
+# ==================== Node.js ====================
+# Dependencies
+node_modules/
+jspm_packages/
+
+# Production builds
+dist/
+dist-ssr/
+build/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# ==================== Database ====================
+# SQLite databases (keep structure, not data)
+*.db
+*.sqlite
+*.sqlite3
+database/*.db
+database/*.sqlite
+database/*.sqlite3
+
+# Database backups
+*.db.bak
+*.sqlite.bak
+
+# ==================== Environment & Secrets ====================
+# CRITICAL: Never commit these files
+.env
+.env.local
+.env.production
+.env.*.local
+*.env
+
+# Keep example files for reference
+!.env.example
+!.env.sample
+
+# ==================== Logs ====================
+*.log
+logs/
+*.log.*
+
+# ==================== OS Generated ====================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.directory
+.Trash-*
+
+# ==================== IDEs & Editors ====================
+# VSCode
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# PyCharm
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+Session.vim
+Temporary Items
+.netrwhist
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+
+# ==================== Replit (REMOVE) ====================
+.replit
+replit.nix
+.replit.nix
+replit.toml
+.config/replit/
+
+# ==================== Project Specific ====================
+# Migrations (keep migration files, not database)
+backend/migrations/versions/*.pyc
+
+# Uploaded files / user content
+uploads/
+media/
+static/uploads/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Backup files
+*.bak
+*.backup
+*_backup
+
+# Test files
+test_output/
+.pytest_cache/
+
+# Documentation builds
+docs/_build/
+site/
+
+# ==================== Security & Keys ====================
+# SSH keys
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# API keys & credentials
+*secret*
+*credential*
+*password*
+# But allow files that are part of code structure
+!backend/config.py
+!frontend/src/services/api.js
+
+# ==================== Deployment ====================
+# Production configs
+*.production.config
+docker-compose.override.yml
+
+# ==================== M-PESA & Payment ====================
+# Transaction logs (sensitive)
+transactions/
+payment_logs/
+
+# ==================== Keep These ====================
+# Keep README and documentation
+!README.md
+!Documentation.md
+!*.example
+!.gitkeep
+
+# Keep empty directories with .gitkeep files
+!**/.gitkeep
