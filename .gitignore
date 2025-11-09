@@ -239,4 +239,7 @@ payment_logs/
 !.gitkeep
 
 # Keep empty directories with .gitkeep files
-!**/.gitkeep
+!**/.gitkeep# Replit
+.replit
+replit.nix
+.local/
